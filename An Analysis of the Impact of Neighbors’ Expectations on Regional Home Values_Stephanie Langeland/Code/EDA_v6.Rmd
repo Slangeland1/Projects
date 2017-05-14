@@ -1,0 +1,1280 @@
+File-Name:  EDA_v6
+
+Version: 6
+
+Date: 03/17/17 - 04/11/17
+
+Author: Stephanie Langeland 
+
+Purpose: Analyze the data: final output for the project 
+
+Input Files: "master.csv"
+
+Output Files: None yet
+
+Data Output: none  
+
+Previous files: EDA_v5
+
+Dependencies: EDA_v1 - v5
+
+Required by: Data Analysis Final Project
+
+Status: In progress 
+
+Machine: Personal 2011 MacBook Pro
+
+R version 3.3.3
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Input data: 
+```{r}
+rm(list = ls(all = TRUE))   # cleans everything in the workspace
+
+master <- read.csv("/Users/StephanieLangeland/Desktop/Columbia/Data Analysis/Final Project/Cleaned data/master.csv")
+
+master <- master[ , -1] # column X is the row number - remove that column 
+```
+
+# Split the data:
+```{r}
+set.seed(1234) # for reproducibility
+train <- sample(nrow(master), 7836) # split the `master` data in half
+
+## Training and testing data for all regions:
+training <- master[train,] # training data
+testing <- master[-train, ] # testing data
+
+## Subset the training and testing data for each region:
+training1 <- training[which(training$state_region == 1), ]
+testing1 <- testing[which(testing$state_region == 1), ]
+
+training2 <- training[which(training$state_region == 2), ]
+testing2 <- testing[which(testing$state_region == 2), ]
+
+training3 <- training[which(training$state_region == 3), ]
+testing3 <- testing[which(testing$state_region == 3), ]
+
+training4 <- training[which(training$state_region == 4), ]
+testing4 <- testing[which(testing$state_region == 4), ]
+
+training5 <- training[which(training$state_region == 5), ]
+testing5 <- testing[which(testing$state_region == 5), ]
+
+training6 <- training[which(training$state_region == 6), ]
+testing6 <- testing[which(testing$state_region == 6), ]
+
+training7 <- training[which(training$state_region == 7), ]
+testing7 <- testing[which(testing$state_region == 7), ]
+
+training8 <- training[which(training$state_region == 8), ]
+testing8 <- testing[which(testing$state_region == 8), ]
+
+training9 <- training[which(training$state_region == 9), ]
+testing9 <- testing[which(testing$state_region == 9), ]
+```
+
+# Data Visualizations:
+```{r}
+##:::::::::::::::: Plot of the `hpa_comp_mean_direction` distribution:
+sum(master$hpa_comp_mean_direction == 0)
+sum(master$hpa_comp_mean_direction == 1)
+summary(is.na(master$hpa_comp_mean_direction))
+
+thing2 <- matrix(c(0, 1, "NA", 
+                   8086, 7586, 0),
+                 byrow = FALSE,
+                 ncol = 2, 
+                 nrow = 3)
+thing2 <- as.data.frame(thing2)
+
+library(ggplot2)
+ggplot(data = thing2, aes(x = V1, y = V2, fill = V2)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = V2), vjust = 0, colour = "black") +
+  scale_x_discrete(breaks = c(0, 1, "NA"),
+                      labels = c("0 = Decrease in the HPA", 
+                                "1 = Increase in the HPA",
+                                "NA = Missing Values")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank()) +
+  ggtitle("Distribution of the Mean of HPA Data\n(hpa_mean_direction Variable)")
+
+
+
+##:::::::::::::::: Plot of the `hpa_comp_med_direction` distribution:
+sum(master$hpa_comp_med_direction == 0)
+sum(master$hpa_comp_med_direction == 1)
+summary(is.na(master$hpa_comp_med_direction))
+
+thing3 <- matrix(c(0, 1, "NA",
+                   8676, 6996, 0),
+                 byrow = FALSE,
+                 ncol = 2, 
+                 nrow = 3)
+thing3 <- as.data.frame(thing3)
+
+ggplot(data = thing3, aes(x = V1, y = V2, fill = V2)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = V2), vjust = 0, colour = "black") +
+  scale_x_discrete(breaks = c(0, 1, "NA"),
+                      labels = c("0 = Decrease in the HPA", 
+                                "1 = Increase in the HPA",
+                                "NA = Missing Values")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank()) +
+  ggtitle("Distribution of the Median of HPA Data\n(hpa_med_direction Variable)")
+
+
+
+##:::::::::::::::: Plot of the `H1` distribution:
+sum(master$H1 == 0, na.rm = TRUE)
+sum(master$H1 == 1, na.rm = TRUE)
+sum(master$H1 == 2, na.rm = TRUE)
+sum(master$H1 == 3, na.rm = TRUE)
+sum(master$H1 == 4, na.rm = TRUE)
+summary(is.na(master$H1))
+
+thing5 <- matrix(c(0, 1, 2, 3, 4, "NA",
+                   2080, 
+                   3697, 
+                   2855, 
+                   0, 
+                   506,
+                   6534),
+                 byrow = FALSE,
+                 ncol = 2, 
+                 nrow = 6)
+thing5 <- as.data.frame(thing5)
+
+ggplot(data = thing5, aes(x = V1, y = V2, fill = V2, na.rm = FALSE)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = V2), vjust = 0, colour = "black") +
+  scale_x_discrete(breaks = c(0, 1, 2, 3, 4, "NA"),
+                     labels = c("Lower Value",
+                                "Higher Value",
+                                "Refused",
+                                "Stayed About the Same",
+                                " \"Don't know\"",
+                                "NA = Missing Values")) +
+  xlab("Responses") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank()) +
+  ggtitle("Compared to five years ago (since 2008) or compared to 12 months ago,\ndo you think the value of your home today is higher, lower or stayed the same?\n(H1 Variable)")
+
+##^ heavy skew (nearly 3x as many "1" cases compared to "0 cases") and many people refused (= 2) to answer, skweing the data even more.
+
+
+
+##:::::::::::::::: Plot of the `H4` distribution:
+sum(master$H4 == 0, na.rm = TRUE)
+sum(master$H4 == 1, na.rm = TRUE)
+sum(master$H4 == 2, na.rm = TRUE)
+sum(master$H4 == 3, na.rm = TRUE)
+sum(master$H4 == 4, na.rm = TRUE)
+summary(is.na(master$H4))
+
+thing6 <- matrix(c(0, 1, 2, 3, 4, "NA",
+                   757, 
+                   3932, 
+                   0, 
+                   4134, 
+                   1176,
+                   5673),
+                 byrow = FALSE,
+                 ncol = 2, 
+                 nrow = 6)
+thing6 <- as.data.frame(thing6)
+
+ggplot(data = thing6, aes(x = V1, y = V2, fill = V2)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = V2), vjust = 0, colour = "black") +
+  scale_x_discrete(breaks = c(0, 1, 2, 3, 4, "NA"),
+                     labels = c("Lower Value",
+                                "Higher Value",
+                                "Refused",
+                                "Stay About the Same",
+                                " \"Don't know\"",
+                                "NA = Missing Values")) +
+  xlab("Responses") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.y = element_blank(), 
+        axis.text.y = element_blank()) +
+  ggtitle("In the next 12 months, how much, if at all, do you think that home\nprices in your neighborhood will change? (H4 Variable)")
+## ^some skew in that there are about 1/3 less "0" cases compared to "1" cases; heavy skew due to respondents staying home values will stay ~ the same (= 3).
+
+
+
+##:::::::::::::::: Plot of the `state_region` distribution:
+sum(master$state_region == 1)
+sum(master$state_region == 2)
+sum(master$state_region == 3)
+sum(master$state_region == 4)
+sum(master$state_region == 5)
+sum(master$state_region == 6)
+sum(master$state_region == 7)
+sum(master$state_region == 8)
+sum(master$state_region == 9)
+
+thing4 <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9,
+                   745, 
+                   2118, 
+                   2519, 
+                   1266, 
+                   3093, 
+                   847,
+                   1588,
+                   1164,
+                   2332),
+                 byrow = FALSE,
+                 ncol = 2, 
+                 nrow = 9)
+thing4 <- as.data.frame(thing4)
+
+ggplot(data = thing4, aes(x = V1, y = V2, fill = V2)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Distribution of Data by Region") +
+  xlab("Region") +
+  ylab("Count") +
+  geom_text(aes(label = V2), vjust = 0, colour = "black") +
+  scale_x_continuous(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                     labels = c("New England",
+                                "Mid-Atlantic",
+                                "East-North Central",
+                                "West-North Central",
+                                "South Atlantic",
+                                "East-South Central",
+                                "West-South Central",
+                                "Mountain",
+                                "Pacific")) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+##:::::::::::::::: Summary Statistics of the Data:
+library(stargazer)
+stargazer(master, type = "text")
+
+##:::::::::::::::: Plots to verify that the training and testing sets have the same skew:
+hist(training$state_region)
+hist(testing$state_region) ## skewed the SAME way btwn training and testing data sets - good
+
+hist(training$hpa_comp_mean_direction) ## no skew - good
+hist(testing$hpa_comp_mean_direction) ## no skew - good 
+
+hist(training$H4) 
+hist(testing$H4) ## skewed the SAME way btwn training and testing data sets 
+
+hist(training$H1) 
+hist(testing$H1) ## skewed the SAME way btwn training and testing data sets
+
+
+
+##:::::::::::::::: Conditional density plots:
+cdplot(as.factor(hpa_comp_med_direction) ~ H1, 
+       data = master) ## HPA_median: conditional density plot of H1
+
+cdplot(as.factor(hpa_comp_med_direction) ~ H4, 
+       data = master) # HPA_median:  conditional density plot of H4
+
+
+cdplot(as.factor(hpa_comp_med_direction) ~ H1, 
+       data = master) ## HPA_median: conditional density plot of H1
+
+cdplot(as.factor(hpa_comp_med_direction) ~ H4, 
+       data = master) # HPA_median:  conditional density plot of H4
+```
+
+# OLS MODEL #1 (MEDIAN) for the hpa:
+```{r}
+##:::::::::::::::: MODEL #1 for all regions using master data - OLS:
+lm_a_md_ols <- lm(hpa_comp_med_direction ~ H4 + H1,
+                data = master)
+
+plot(lm_a_md_ols)  ## diagnostic plots
+
+library(MASS)
+hist(studres(lm_a_md_ols),
+     main = "Distribution of Studentized Residuals") ## The Studentized 
+## residuals, like standardized residuals, are normalized to unit 
+## variance, but the Studentized version is fitted ignoring the current 
+## data point.
+
+
+library(stargazer)
+stargazer(lm_a_md_ols, type = "text") ## summary stats
+summary(lm_a_md_ols)
+
+with(master, table("Prediction" = H4, "Reference" =  hpa_comp_med_direction)) ## confusion matrix for H4
+with(master, table("Prediction" = H1, "Reference" =  hpa_comp_med_direction)) ## confusion matrix for H1
+
+
+
+##:::::::::::::::: MODEL #1 by region using training and testing data - OLS:
+
+##:::::::::::::::: MODEL #1 for all regions using training and testing data - OLS:
+lm_a_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training)
+
+lm_a_md_pred <- predict(lm_a_md, 
+                    newdata = testing,
+                    type = "response")
+
+library(caret)
+lm_a_md_cm <- confusionMatrix(
+  testing$hpa_comp_med_direction, 
+  as.integer(lm_a_md_pred > 0.5))
+
+
+
+##:::::::::::::::: MODEL #1 for region 1 using training and testing data - OLS:
+lm_1_md <- lm(hpa_comp_med_direction ~ H4 + H1, 
+              data = training1)
+
+lm_1_md_pred <- predict(lm_1_md,
+                        newdata = testing1,
+                        type = "response")
+
+#lm_1_md_cm <- confusionMatrix(
+#  testing$hpa_comp_med_direction, 
+#  as.integer(lm_1_md_pred > 0.5)) ## ERROR result
+
+lm_1_md_cm <- table(
+  testing1$hpa_comp_med_direction,
+  as.integer(lm_1_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 2 using training and testing data - OLS:
+lm_2_md <- lm(hpa_comp_med_direction ~ H4 + H1, 
+              data = training2)
+
+lm_2_md_pred <- predict(lm_2_md,
+                        newdata = testing2,
+                        type = "response")
+
+#lm_2_md_cm <- confusionMatrix(
+#  testing2$hpa_comp_med_direction, 
+#  as.integer(lm_2_md_pred > 0.5)) ## ERROR
+
+lm_2_md_cm <- table(
+  testing2$hpa_comp_med_direction,
+  as.integer(lm_2_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #3 for region 1 using training and testing data - OLS:
+lm_3_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training3)
+
+lm_3_md_pred <- predict(lm_3_md,
+                        newdata = testing3,
+                        type = "response")
+
+lm_3_md_cm <- confusionMatrix(
+  testing3$hpa_comp_med_direction, 
+  as.integer(lm_3_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 for region 4 using training and testing data - OLS:
+lm_4_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training4)
+
+lm_4_md_pred <- predict(lm_4_md,
+                        newdata = testing4,
+                        type = "response")
+
+#lm_4_md_cm <- confusionMatrix(
+#  testing4$hpa_comp_med_direction, 
+#  as.integer(lm_4_md_pred > 0.5)) ## ERROR result 
+
+lm_4_md_cm <- table(
+  testing4$hpa_comp_med_direction,
+  as.integer(lm_4_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 5 using training and testing data - OLS:
+lm_5_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training5)
+
+lm_5_md_pred <- predict(lm_5_md,
+                        newdata = testing5,
+                        type = "response")
+
+#lm_5_md_cm <- confusionMatrix(
+#  testing5$hpa_comp_med_direction, 
+#  as.integer(lm_5_md_pred > 0.5)) ## ERROR result
+
+lm_5_md_cm <- table(
+  testing5$hpa_comp_med_direction,
+  as.integer(lm_5_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 6 using training and testing data - OLS:
+lm_6_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training6)
+
+lm_6_md_pred <- predict(lm_6_md,
+                        newdata = testing6,
+                        type = "response")
+
+lm_6_md_cm <- confusionMatrix(
+  testing6$hpa_comp_med_direction, 
+  as.integer(lm_6_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 for region 7 using training and testing data - OLS:
+lm_7_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training7)
+
+lm_7_md_pred <- predict(lm_7_md,
+                        newdata = testing7,
+                        type = "response")
+
+#lm_7_md_cm <- confusionMatrix(
+#  testing7$hpa_comp_med_direction, 
+#  as.integer(lm_7_md_pred > 0.5)) ## ERROR result
+
+lm_7_md_cm <- table(
+  testing7$hpa_comp_med_direction,
+  as.integer(lm_7_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 8 using training and testing data - OLS:
+lm_8_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training8)
+
+lm_8_md_pred <- predict(lm_8_md,
+                        newdata = testing8,
+                        type = "response")
+
+lm_8_md_cm <- confusionMatrix(
+  testing8$hpa_comp_med_direction, 
+  as.integer(lm_8_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 for region 9 using training and testing data - OLS:
+lm_9_md <- lm(hpa_comp_med_direction ~ H4 + H1,
+              data = training9)
+
+lm_9_md_pred <- predict(lm_9_md,
+                        newdata = testing9,
+                        type = "response")
+
+lm_9_md_cm <- confusionMatrix(
+  testing9$hpa_comp_med_direction, 
+  as.integer(lm_9_md_pred > 0.5)) 
+
+
+##:::::::::::::::: SUMMARY OF THIS SECTION:
+
+##:::::::::::::::: MODEL #1 for all regions using master data - OLS:
+with(master, table("Prediction" = H4, "Reference" =  hpa_comp_med_direction)) ## confusion matrix for H4
+with(master, table("Prediction" = H1, "Reference" =  hpa_comp_med_direction)) ## confusion matrix for H1
+
+##:::::::::::::::: MODEL #1 confusion matrices for each region using training and testing data - OLS:
+lm_a_md_cm   
+lm_1_md_cm   
+lm_2_md_cm  
+lm_3_md_cm   
+lm_4_md_cm   
+lm_5_md_cm   
+lm_6_md_cm   
+lm_7_md_cm   
+lm_8_md_cm   
+lm_9_md_cm  
+```
+
+# LOGIT MODEL #1 (MEDIAN) for the hpa:
+```{r}
+##:::::::::::::::: MODEL #1 for all regions using master data - LOGIT:
+lg_a_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+                data = master,
+                family = binomial)
+
+plot(lg_a_md)
+hist(studres(lg_a_md),
+     main = "Distribution of Studentized Residuals")
+
+stargazer(lg_a_md, type = "text") 
+summary(lg_a_md)
+
+exp(coef(lg_a_md)) ## odds ratio 
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(0))) ## predicted probability when both Xs = 0 
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(1), 
+                             H4 = c(1))) ## predicted probability when both Xs = 1 
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(2), 
+                             H4 = c(2))) ## predicted probability when both Xs = 2
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(3), 
+                             H4 = c(3))) ## predicted probability when both Xs = 3
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(4), 
+                             H4 = c(4))) ## predicted probability when both Xs = 4
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(0))) ## predicted probability when H1 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(1))) ## predicted probability when H1 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(2))) ## predicted probability when H1 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(3))) ## predicted probability when H1 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(4))) ## predicted probability when H1 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(1), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(2), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(3), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_md, 
+        type = "response", 
+        newdata = data.frame(H1 = c(4), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+
+
+##:::::::::::::::: MODEL #1 by region using training and testing data - LOGIT:
+
+##:::::::::::::::: MODEL #1 for all regions using training and testing data - LOGIT:
+lg_a_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+                  data = training, 
+                  family = binomial)
+
+lg_a_md_pred <- predict(lg_a_md, 
+                    newdata = testing,
+                    type = "response")
+
+lg_a_md_cm <- confusionMatrix(
+  testing$hpa_comp_med_direction, 
+  as.integer(lg_a_md_pred > 0.5))
+
+
+
+##:::::::::::::::: MODEL #1 for region 1 using training and testing data - LOGIT:
+lg_1_md <- glm(hpa_comp_med_direction ~ H4 + H1, 
+              data = training1, 
+              family = binomial)
+
+lg_1_md_pred <- predict(lg_1_md,
+                        newdata = testing1,
+                        type = "response")
+
+#lg_1_md_cm <- confusionMatrix(
+#  testing$hpa_comp_med_direction, 
+#  as.integer(lg_1_md_pred > 0.5)) ## ERROR result
+
+lg_1_md_cm <- table(
+  testing1$hpa_comp_med_direction,
+  as.integer(lg_1_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 2 using training and testing data - LOGIT:
+lg_2_md <- glm(hpa_comp_med_direction ~ H4 + H1, 
+              data = training2, 
+              family = binomial)
+
+lg_2_md_pred <- predict(lg_2_md,
+                        newdata = testing2,
+                        type = "response")
+
+#lg_2_md_cm <- confusionMatrix(
+#  testing2$hpa_comp_med_direction, 
+#  as.integer(lg_2_md_pred > 0.5)) ## ERROR
+
+lg_2_md_cm <- table(
+  testing2$hpa_comp_med_direction,
+  as.integer(lg_2_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #3 for region 1 using training and testing data - LOGIT:
+lg_3_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training3, 
+              family = binomial)
+
+lg_3_md_pred <- predict(lg_3_md,
+                        newdata = testing3,
+                        type = "response")
+
+lg_3_md_cm <- confusionMatrix(
+  testing3$hpa_comp_med_direction, 
+  as.integer(lg_3_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 for region 4 using training and testing data - LOGIT:
+lg_4_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training4, 
+              family = binomial)
+
+lg_4_md_pred <- predict(lg_4_md,
+                        newdata = testing4,
+                        type = "response")
+
+#lg_4_md_cm <- confusionMatrix(
+#  testing4$hpa_comp_med_direction, 
+#  as.integer(lg_4_md_pred > 0.5)) ## ERROR result 
+
+lg_4_md_cm <- table(
+  testing4$hpa_comp_med_direction,
+  as.integer(lg_4_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 5 using training and testing data - LOGIT:
+lg_5_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training5, 
+              family = binomial)
+
+lg_5_md_pred <- predict(lg_5_md,
+                        newdata = testing5,
+                        type = "response")
+
+#lg_5_md_cm <- confusionMatrix(
+#  testing5$hpa_comp_med_direction, 
+#  as.integer(lg_5_md_pred > 0.5)) ## ERROR result
+
+lg_5_md_cm <- table(
+  testing5$hpa_comp_med_direction,
+  as.integer(lg_5_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 6 using training and testing data - LOGIT:
+lg_6_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training6, 
+              family = binomial)
+
+lg_6_md_pred <- predict(lg_6_md,
+                        newdata = testing6,
+                        type = "response")
+
+lg_6_md_cm <- confusionMatrix(
+  testing6$hpa_comp_med_direction, 
+  as.integer(lg_6_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 for region 7 using training and testing data - LOGIT:
+lg_7_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training7, 
+              family = binomial)
+
+lg_7_md_pred <- predict(lg_7_md,
+                        newdata = testing7,
+                        type = "response")
+
+#lg_7_md_cm <- confusionMatrix(
+#  testing7$hpa_comp_med_direction, 
+#  as.integer(lg_7_md_pred > 0.5)) ## ERROR result
+
+lg_7_md_cm <- table(
+  testing7$hpa_comp_med_direction,
+  as.integer(lg_7_md_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #1 for region 8 using training and testing data - LOGIT:
+lg_8_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training8, 
+              family = binomial)
+
+lg_8_md_pred <- predict(lg_8_md,
+                        newdata = testing8,
+                        type = "response")
+
+lg_8_md_cm <- confusionMatrix(
+  testing8$hpa_comp_med_direction, 
+  as.integer(lg_8_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 for region 9 using training and testing data - LOGIT:
+lg_9_md <- glm(hpa_comp_med_direction ~ H4 + H1,
+              data = training9, 
+              family = binomial)
+
+lg_9_md_pred <- predict(lg_9_md,
+                        newdata = testing9,
+                        type = "response")
+
+lg_9_md_cm <- confusionMatrix(
+  testing9$hpa_comp_med_direction, 
+  as.integer(lg_9_md_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #1 confusion matrices for each region using training and testing data - LOGIT:
+lg_a_md_cm
+lg_1_md_cm   
+lg_2_md_cm  
+lg_3_md_cm   
+lg_4_md_cm   
+lg_5_md_cm   
+lg_6_md_cm   
+lg_7_md_cm   
+lg_8_md_cm   
+lg_9_md_cm  
+```
+
+# OLS MODEL 2 (MEAN) for the hpa:
+```{r}
+##:::::::::::::::: MODEL #2 for all regions using master data - OLS:
+lm_a_mn_ols <- lm(hpa_comp_mean_direction ~ H4 + H1,
+                data = master)
+
+plot(lm_a_mn_ols)
+hist(studres(lm_a_mn_ols),
+     main = "Distribution of Studentized Residuals")
+
+stargazer(lm_a_mn_ols, type = "text")
+summary(lm_a_mn_ols)
+
+with(master, table("Prediction" = H4, "Reference" =  hpa_comp_mean_direction)) ## confusion matrix for H4
+with(master, table("Prediction" = H1, "Reference" =  hpa_comp_mean_direction)) ## confusion matrix for H1
+
+
+
+##:::::::::::::::: MODEL #2 by region using training and testing data - OLS:
+
+##:::::::::::::::: MODEL #2 for all regions using training and testing data - OLS:
+lm_a_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+          data = training)
+
+lm_a_mn_pred <- predict(lm_a_mn, 
+                    newdata = testing,
+                    type = "response")
+
+lm_a_mn_cm <- confusionMatrix(
+  testing$hpa_comp_mean_direction, 
+  as.integer(lm_a_mn_pred > 0.5))
+ 
+
+
+##:::::::::::::::: MODEL #2 for region 1 using training and testing data - OLS:
+lm_1_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training1)
+
+lm_1_mn_pred <- predict(lm_1_mn,
+                        newdata = testing1,
+                        type = "response")
+
+#lm_1_mn_cm <- confusionMatrix(
+#  testing1$hpa_comp_mean_direction, 
+#  as.integer(lm_1_mn_pred > 0.5)) ## ERROR result
+
+lm_1_mn_cm <- table(
+  testing1$hpa_comp_mean_direction,
+  as.integer(lm_1_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 2 using training and testing data - OLS:
+lm_2_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training2)
+
+lm_2_mn_pred <- predict(lm_2_mn,
+                        newdata = testing2,
+                        type = "response")
+
+#lm_2_mn_cm <- confusionMatrix(
+#  testing2$hpa_comp_mean_direction, 
+#  as.integer(lm_2_mn_pred > 0.5)) ## ERROR result 
+
+lm_2_mn_cm <- table(
+  testing2$hpa_comp_mean_direction,
+  as.integer(lm_2_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 3 using training and testing data - OLS:
+lm_3_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training3)
+
+lm_3_mn_pred <- predict(lm_3_mn,
+                        newdata = testing3,
+                        type = "response")
+
+lm_3_mn_cm <- confusionMatrix(
+  testing3$hpa_comp_mean_direction, 
+  as.integer(lm_3_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #2 for region 4 using training and testing data - OLS:
+lm_4_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training4)
+
+lm_4_mn_pred <- predict(lm_4_mn,
+                        newdata = testing4,
+                        type = "response")
+
+#lm_4_mn_cm <- confusionMatrix(
+#  testing4$hpa_comp_mean_direction, 
+#  as.integer(lm_4_mn_pred > 0.5)) ## ERROR result
+
+lm_4_mn_cm <- table(
+  testing4$hpa_comp_mean_direction,
+  as.integer(lm_4_mn_pred > 0.5)
+  )    
+
+
+
+##:::::::::::::::: MODEL #2 for region 5 using training and testing data - OLS:
+lm_5_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training5)
+
+lm_5_mn_pred <- predict(lm_5_mn,
+                        newdata = testing5,
+                        type = "response")
+
+#lm_5_mn_cm <- confusionMatrix(
+#  testing5$hpa_comp_mean_direction, 
+#  as.integer(lm_5_mn_pred > 0.5)) ## ERROR result
+
+lm_5_mn_cm <- table(
+  testing5$hpa_comp_mean_direction,
+  as.integer(lm_5_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 6 using training and testing data - OLS:
+lm_6_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training6)
+
+lm_6_mn_pred <- predict(lm_6_mn,
+                        newdata = testing6,
+                        type = "response")
+
+lm_6_mn_cm <- confusionMatrix(
+  testing6$hpa_comp_mean_direction, 
+  as.integer(lm_6_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #2 for region 7 using training and testing data - OLS:
+lm_7_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training7)
+
+lm_7_mn_pred <- predict(lm_7_mn,
+                        newdata = testing7,
+                        type = "response")
+
+#lm_7_mn_cm <- confusionMatrix(
+#  testing7$hpa_comp_mean_direction, 
+#  as.integer(lm_7_mn_pred > 0.5)) ## ERROR result
+
+lm_7_mn_cm <- table(
+  testing7$hpa_comp_mean_direction,
+  as.integer(lm_7_mn_pred > 0.5)
+  )     
+
+
+
+##:::::::::::::::: MODEL #2 for region 8 using training and testing data - OLS:
+lm_8_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training8)
+
+lm_8_mn_pred <- predict(lm_8_mn,
+                        newdata = testing8,
+                        type = "response")
+
+lm_8_mn_cm <- confusionMatrix(
+  testing8$hpa_comp_mean_direction, 
+  as.integer(lm_8_mn_pred > 0.5)) 
+ 
+
+
+##:::::::::::::::: MODEL #2 for region 9 using training and testing data - OLS:
+lm_9_mn <- lm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training9)
+
+lm_9_mn_pred <- predict(lm_9_mn,
+                        newdata = testing9,
+                        type = "response")
+
+lm_9_mn_cm <- confusionMatrix(
+  testing9$hpa_comp_mean_direction, 
+  as.integer(lm_9_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: SUMMARY OF THIS SECTION:
+
+##:::::::::::::::: MODEL #2 for all regions using master data - OLS:
+with(master, table("Prediction" = H4, "Reference" =  hpa_comp_mean_direction)) ## confusion matrix for H4
+with(master, table("Prediction" = H1, "Reference" =  hpa_comp_mean_direction)) ## confusion matrix for H1
+
+##:::::::::::::::: MODEL #2 confusion matrices for each region using training and testing data - OLS:
+lm_a_mn_cm   
+lm_1_mn_cm   
+lm_2_mn_cm    
+lm_3_mn_cm   
+lm_4_mn_cm  
+lm_5_mn_cm   
+lm_6_mn_cm   
+lm_7_mn_cm   
+lm_8_mn_cm   
+lm_9_mn_cm   
+```
+
+# LOGIT MODEL 2 (MEAN) for the hpa:
+```{r}
+##:::::::::::::::: MODEL #2 for all regions using master data - LOGIT:
+lg_a_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+                data = master, 
+                family = binomial)
+
+plot(lg_a_mn)
+hist(studres(lg_a_mn),
+     main = "Distribution of Studentized Residuals")
+
+stargazer(lg_a_mn, type = "text") 
+summary(lg_a_mn)
+
+exp(coef(lg_a_mn))
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(0))) ## predicted probability when both Xs = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(1), 
+                             H4 = c(1))) ## predicted probability when both Xs = 1
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(2), 
+                             H4 = c(2))) ## predicted probability when both Xs = 2
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(3), 
+                             H4 = c(3))) ## predicted probability when both Xs = 3
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(4), 
+                             H4 = c(4))) ## predicted probability when both Xs = 4
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(0))) ## predicted probability when H1 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(1))) ## predicted probability when H1 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(2))) ## predicted probability when H1 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(3))) ## predicted probability when H1 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(4))) ## predicted probability when H1 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(0), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(1), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(2), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(3), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+predict(lg_a_mn, 
+        type = "response", 
+        newdata = data.frame(H1 = c(4), 
+                             H4 = c(0))) ## predicted probability when H4 = 0
+
+
+
+##:::::::::::::::: MODEL #2 by region using training and testing data - LOGIT:
+
+##:::::::::::::::: MODEL #2 for all regions using training and testing data - LOGIT:
+lg_a_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+                  data = training, 
+                  family = binomial)
+
+lg_a_mn_pred <- predict(lg_a_mn, 
+                    newdata = testing,
+                    type = "response")
+
+lg_a_mn_cm <- confusionMatrix(
+  testing$hpa_comp_mean_direction, 
+  as.integer(lg_a_mn_pred > 0.5))
+
+
+
+##:::::::::::::::: MODEL #2 for region 1 using training and testing data - LOGIT:
+lg_1_mn <- glm(hpa_comp_mean_direction ~ H4 + H1, 
+              data = training1, 
+              family = binomial)
+
+lg_1_mn_pred <- predict(lg_1_mn,
+                        newdata = testing1,
+                        type = "response")
+
+#lg_1_mn_cm <- confusionMatrix(
+#  testing$hpa_comp_mean_direction, 
+#  as.integer(lg_1_mn_pred > 0.5)) ## ERROR result
+
+lg_1_mn_cm <- table(
+  testing1$hpa_comp_mean_direction,
+  as.integer(lg_1_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 2 using training and testing data - LOGIT:
+lg_2_mn <- glm(hpa_comp_mean_direction ~ H4 + H1, 
+              data = training2, 
+              family = binomial)
+
+lg_2_mn_pred <- predict(lg_2_mn,
+                        newdata = testing2,
+                        type = "response")
+
+#lg_2_mn_cm <- confusionMatrix(
+#  testing2$hpa_comp_mean_direction, 
+#  as.integer(lg_2_mn_pred > 0.5)) ## ERROR
+
+lg_2_mn_cm <- table(
+  testing2$hpa_comp_mean_direction,
+  as.integer(lg_2_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #3 for region 1 using training and testing data - LOGIT:
+lg_3_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training3, 
+              family = binomial)
+
+lg_3_mn_pred <- predict(lg_3_mn,
+                        newdata = testing3,
+                        type = "response")
+
+lg_3_mn_cm <- confusionMatrix(
+  testing3$hpa_comp_mean_direction, 
+  as.integer(lg_3_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #2 for region 4 using training and testing data - LOGIT:
+lg_4_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training4, 
+              family = binomial)
+
+lg_4_mn_pred <- predict(lg_4_mn,
+                        newdata = testing4,
+                        type = "response")
+
+#lg_4_mn_cm <- confusionMatrix(
+#  testing4$hpa_comp_mean_direction, 
+#  as.integer(lg_4_mn_pred > 0.5)) ## ERROR result 
+
+lg_4_mn_cm <- table(
+  testing4$hpa_comp_mean_direction,
+  as.integer(lg_4_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 5 using training and testing data - LOGIT:
+lg_5_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training5, 
+              family = binomial)
+
+lg_5_mn_pred <- predict(lg_5_mn,
+                        newdata = testing5,
+                        type = "response")
+
+#lg_5_mn_cm <- confusionMatrix(
+#  testing5$hpa_comp_mean_direction, 
+#  as.integer(lg_5_mn_pred > 0.5)) ## ERROR result
+
+lg_5_mn_cm <- table(
+  testing5$hpa_comp_mean_direction,
+  as.integer(lg_5_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 6 using training and testing data - LOGIT:
+lg_6_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training6, 
+              family = binomial)
+
+lg_6_mn_pred <- predict(lg_6_mn,
+                        newdata = testing6,
+                        type = "response")
+
+lg_6_mn_cm <- confusionMatrix(
+  testing6$hpa_comp_mean_direction, 
+  as.integer(lg_6_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #2 for region 7 using training and testing data - LOGIT:
+lg_7_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training7, 
+              family = binomial)
+
+lg_7_mn_pred <- predict(lg_7_mn,
+                        newdata = testing7,
+                        type = "response")
+
+#lg_7_mn_cm <- confusionMatrix(
+#  testing7$hpa_comp_mean_direction, 
+#  as.integer(lg_7_mn_pred > 0.5)) ## ERROR result
+
+lg_7_mn_cm <- table(
+  testing7$hpa_comp_mean_direction,
+  as.integer(lg_7_mn_pred > 0.5)
+)
+
+
+
+##:::::::::::::::: MODEL #2 for region 8 using training and testing data - LOGIT:
+lg_8_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training8, 
+              family = binomial)
+
+lg_8_mn_pred <- predict(lg_8_mn,
+                        newdata = testing8,
+                        type = "response")
+
+lg_8_mn_cm <- confusionMatrix(
+  testing8$hpa_comp_mean_direction, 
+  as.integer(lg_8_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #2 for region 9 using training and testing data - LOGIT:
+lg_9_mn <- glm(hpa_comp_mean_direction ~ H4 + H1,
+              data = training9, 
+              family = binomial)
+
+lg_9_mn_pred <- predict(lg_9_mn,
+                        newdata = testing9,
+                        type = "response")
+
+lg_9_mn_cm <- confusionMatrix(
+  testing9$hpa_comp_mean_direction, 
+  as.integer(lg_9_mn_pred > 0.5)) 
+
+
+
+##:::::::::::::::: MODEL #2 confusion matrices for each region using training and testing data - LOGIT:
+lg_a_mn_cm
+lg_1_mn_cm   
+lg_2_mn_cm  
+lg_3_mn_cm   
+lg_4_mn_cm   
+lg_5_mn_cm   
+lg_6_mn_cm   
+lg_7_mn_cm   
+lg_8_mn_cm   
+lg_9_mn_cm  
+```

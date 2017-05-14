@@ -1,0 +1,431 @@
+File-Name:  EDA_v5
+
+Version: 5
+
+Date: 03/17/17 
+
+Author: Stephanie Langeland 
+
+Purpose: Create a master dataset. 
+
+Input Files: "shed_final.csv" and "corelogic_final.csv"
+
+Output Files: master.csv
+
+Data Output: none 
+
+Previous files: EDA_v4
+
+Dependencies: EDA_v1 - v4
+
+Required by: Data Analysis Final Project
+
+Status: In progress 
+
+Machine: Personal 2011 MacBook Pro
+
+R version 3.3.3
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part 1:  Bring in relevant data from `corelogic_final` into `shed_final` to create a `master` dataset: 
+
+```{r}
+rm(list = ls(all = TRUE))   # cleans everything in the workspace
+
+# SHED:
+shed_final <- read.csv("/Users/StephanieLangeland/Desktop/Columbia/Data Analysis/Final Project/Cleaned data/shed_final.csv")
+
+# Core Logic:
+corelogic_final <- read.csv("/Users/StephanieLangeland/Desktop/Columbia/Data Analysis/Final Project/Cleaned data/corelogic_final.csv")
+
+# `master` dataset creation:
+
+master_raw1 <- shed_final
+
+master_raw1 <- master_raw1[ ,-1] # delete column X because it is the row number - not needed
+
+names(master_raw1)[names(master_raw1) == "year_comp"] <- "year" # rename `year_comp` column to `year`
+
+# the corelogic data is quarterly and the shed data is annual - will create a column that
+# averages the quarters per year and another column that takes the median per year out of all
+# 4 quarters:
+
+library(dplyr)
+
+corelogic_means_all <- group_by(corelogic_final, state_region, year) %>%
+  summarize(hpi_comp_mean = mean(hpi_Comprehensive),
+            hpi_fsp_mean = mean(hpi_SFP),
+            hpa_comp_mean = mean(hpa_Comprehensive),
+            hpa_fsp_mean = mean(hpa_SFP)
+            ) # mean values for each corelogic index by state_region and year - for all years
+
+corelogic_means_all <- as.data.frame(corelogic_means_all)
+
+sub_2013 <- subset(corelogic_means_all, year == 2013) # subset only 2014
+
+sub_2014 <- subset(corelogic_means_all, year == 2014) # subset only 2014
+
+sub_2015 <- subset(corelogic_means_all, year == 2015) # subset only 2015
+
+sub_2016 <- subset(corelogic_means_all, year == 2016) # subset only 2016
+
+sub_13_14 <- merge(x = sub_2013, 
+                   y = sub_2014,
+                   all = TRUE) # merge 2013 - 2014 by columns
+
+sub_15_16 <- merge(x = sub_2015, 
+                   y = sub_2016,
+                   all = TRUE) # merge 2015 - 2016 by columns
+
+corelogic_means <- merge(x = sub_13_14, 
+                         y = sub_15_16,
+                         all = TRUE) # corelogic index means for 2013 - 2016
+
+corelogic_medians_all <- group_by(corelogic_final, state_region, year) %>%
+  summarize(hpi_comp_med = median(hpi_Comprehensive),
+            hpi_fsp_med = median(hpi_SFP),
+            hpa_comp_med = median(hpa_Comprehensive),
+            hpa_sfp_med = median(hpa_SFP)
+            ) # medon values for each corelogic index by state_region and year - for all years
+
+corelogic_medians_all <- as.data.frame(corelogic_medians_all)
+
+sub_2013m <- subset(corelogic_medians_all, year == 2013) # subset only 2014
+
+sub_2014m <- subset(corelogic_medians_all, year == 2014) # subset only 2014
+
+sub_2015m <- subset(corelogic_medians_all, year == 2015) # subset only 2015
+
+sub_2016m <- subset(corelogic_medians_all, year == 2016) # subset only 2016
+
+sub_13_14m <- merge(x = sub_2013m, 
+                   y = sub_2014m,
+                   all = TRUE) # merge 2013 - 2014 by columns
+
+sub_15_16m <- merge(x = sub_2015m, 
+                   y = sub_2016m,
+                   all = TRUE) # merge 2015 - 2016 by columns
+
+corelogic_medians <- merge(x = sub_13_14m, 
+                         y = sub_15_16m,
+                         all = TRUE) # corelogic index medians for 2013 - 2016
+
+corelogic_subset <- merge(x = corelogic_means,
+                          y = corelogic_medians) # merge `corelogic_means` and `corelogic_medians`
+
+master <- merge(x = master_raw1, 
+               y = corelogic_subset, 
+               all = TRUE) # merge `corelogic_subset` and `master_raw1` by state_region and year
+
+## Delete columns that have the exact same info - anything with FSP because that's a CCAR scenario:
+colnames(master)
+### 1) `hpi_comp_mean` and `hpi_fsp_mean` - delete `hpi_fsp_mean` - column 10
+### 2) `hpa_comp_mean` and `hpa_fsp_mean` - delete `hpa_fsp_mean` - column 12
+### 3) `hpi_comp_med` and `hpi_fsp_med`  - delete `hpi_fsp_med` - column 14
+### 4) `hpa_comp_med` and `hpa_sfp_med` - delete `hpa_sfp_med` - column 16
+master <- master[ , -c(10, 12, 14, 16)]
+
+## Procedure to create the `hpa_change` variables:
+### Create a unique ID# such that <year>_<state_region>:
+master$new_id <- paste(master$year, master$state_region, sep = "_")
+
+### Add the column for the following year's HPA for each observation:
+master$hpa_comp_mean_year_follow <-
+  ifelse(master$new_id == "2013_1", 
+         subset(master$hpa_comp_mean, master$year == "2014" & master$state_region == "1"),
+         ifelse(master$new_id == "2013_2", 
+                subset(master$hpa_comp_mean, master$year == "2014" & master$state_region == "2"),
+                ifelse(master$new_id == "2013_3", 
+                       subset(master$hpa_comp_mean, master$year == "2014" & master$state_region == "3"),
+                       ifelse(master$new_id == "2013_4", 
+                              subset(master$hpa_comp_mean, 
+                                     master$year == "2014" & master$state_region == "4"),
+                              ifelse(master$new_id == "2013_5",
+                                     subset(master$hpa_comp_mean, 
+                                            master$year == "2014" & master$state_region == "5"),
+                                     ifelse(master$new_id == "2013_6",
+                                            subset(master$hpa_comp_mean, 
+                                                   master$year == "2014" & master$state_region == "6"),
+                                            ifelse(master$new_id == "2013_7", 
+                                                   subset(master$hpa_comp_mean, 
+                                                          master$year == "2014" & 
+                                                            master$state_region == "7"),
+                                                   ifelse(master$new_id == "2013_8",
+                                                          subset(master$hpa_comp_mean, 
+                                                                 master$year == "2014" & 
+                                                                   master$state_region == "8"),
+                                                          ifelse(master$new_id == "2013_9",
+                                                                 subset(master$hpa_comp_mean, 
+                                                                        master$year == "2014" &
+                                                                          master$state_region == "9"),
+                                                                 ifelse(master$new_id == "2014_1",
+                                                                        subset(master$hpa_comp_mean,
+                                                                               master$year == "2015" &
+                                                                                 master$state_region == "1"),
+                                                                        ifelse(master$new_id == "2014_2",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region
+                                                                                      == "2"),
+                                                                               ifelse(
+                                                                                 master$new_id == "2014_3",
+                                                                                 subset(master$hpa_comp_mean,
+                                                                                        master$year == "2015"
+                                                                                        & master$state_region
+                                                                                        == "3"),
+                                                                                 ifelse(
+                                                                                   master$new_id == "2014_4",
+                                                                                subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region
+                                                                                      == "4"),
+                                                                                ifelse(master$new_id 
+                                                                                       == "2014_5",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region
+                                                                                      == "5"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_6",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "6"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_7",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "7"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_8",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "8"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_9",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "9"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_1",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "1"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_2",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "2"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_3",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "3"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_4",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "4"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_5",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "5"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_6",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "6"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_7",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "7"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_8",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "8"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_9",
+                                                                               subset(master$hpa_comp_mean,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "9"), 
+                                                                               "nope")))))))))))))))))))))))))))
+                                                                               
+## Create the `hpa_change` variable = `hpa_comp_mean_change`:
+master$hpa_comp_mean_change <- as.numeric(master$hpa_comp_mean_year_follow) - master$hpa_comp_mean
+
+## Create the `hpa_direction` variable = `hpa_comp_mean_direction`:
+master$hpa_comp_mean_direction <- ifelse(master$hpa_comp_mean_change > 0, "1", 
+                                          ifelse(master$hpa_comp_mean_change < 0, "0", "nope"))
+
+### Add the column for the following year's HPA for each observation:
+master$hpa_comp_med_year_follow <-
+  ifelse(master$new_id == "2013_1", 
+         subset(master$hpa_comp_med, master$year == "2014" & master$state_region == "1"),
+         ifelse(master$new_id == "2013_2", 
+                subset(master$hpa_comp_med, master$year == "2014" & master$state_region == "2"),
+                ifelse(master$new_id == "2013_3", 
+                       subset(master$hpa_comp_med, master$year == "2014" & master$state_region == "3"),
+                       ifelse(master$new_id == "2013_4", 
+                              subset(master$hpa_comp_med, 
+                                     master$year == "2014" & master$state_region == "4"),
+                              ifelse(master$new_id == "2013_5",
+                                     subset(master$hpa_comp_med, 
+                                            master$year == "2014" & master$state_region == "5"),
+                                     ifelse(master$new_id == "2013_6",
+                                            subset(master$hpa_comp_med, 
+                                                   master$year == "2014" & master$state_region == "6"),
+                                            ifelse(master$new_id == "2013_7", 
+                                                   subset(master$hpa_comp_med, 
+                                                          master$year == "2014" & 
+                                                            master$state_region == "7"),
+                                                   ifelse(master$new_id == "2013_8",
+                                                          subset(master$hpa_comp_med, 
+                                                                 master$year == "2014" & 
+                                                                   master$state_region == "8"),
+                                                          ifelse(master$new_id == "2013_9",
+                                                                 subset(master$hpa_comp_med, 
+                                                                        master$year == "2014" &
+                                                                          master$state_region == "9"),
+                                                                 ifelse(master$new_id == "2014_1",
+                                                                        subset(master$hpa_comp_med,
+                                                                               master$year == "2015" &
+                                                                                 master$state_region == "1"),
+                                                                        ifelse(master$new_id == "2014_2",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region
+                                                                                      == "2"),
+                                                                               ifelse(
+                                                                                 master$new_id == "2014_3",
+                                                                                 subset(master$hpa_comp_med,
+                                                                                        master$year == "2015"
+                                                                                        & master$state_region
+                                                                                        == "3"),
+                                                                                 ifelse(
+                                                                                   master$new_id == "2014_4",
+                                                                                subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region
+                                                                                      == "4"),
+                                                                                ifelse(master$new_id 
+                                                                                       == "2014_5",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region
+                                                                                      == "5"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_6",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "6"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_7",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "7"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_8",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "8"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2014_9",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2015" &
+                                                                                        master$state_region 
+                                                                                      == "9"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_1",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "1"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_2",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "2"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_3",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "3"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_4",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "4"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_5",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "5"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_6",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "6"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_7",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "7"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_8",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "8"),
+                                                                               ifelse(master$new_id 
+                                                                                      == "2015_9",
+                                                                               subset(master$hpa_comp_med,
+                                                                                      master$year == "2016" &
+                                                                                        master$state_region 
+                                                                                      == "9"), 
+                                                                               "nope")))))))))))))))))))))))))))
+                                                                               
+## Create the `hpa_change` variable = `hpa_comp_med_change`:
+master$hpa_comp_med_change <- as.numeric(master$hpa_comp_med_year_follow) - master$hpa_comp_med
+
+## Create the `hpa_direction` variable = `hpa_comp_med_direction`:
+master$hpa_comp_med_direction <- ifelse(master$hpa_comp_med_change > 0, "1", 
+                                          ifelse(master$hpa_comp_med_change < 0, "0", master$hpa_comp_med_change))
+
+## Delete the rows where `state_region` = "CORELOGIC":
+which(master$state_region == "CORELOGIC")
+master <- master[-c(4135, 10032, 15675, 15685), ]
+
+## Delete the 2016 rows because SHED data for those rows don't exist:
+which(master$year == 2016)
+master <- master[-c(15673:15681), ]
+
+master.csv <- write.csv(master, file = "master.csv") # write `master` to csv file
+```
+
