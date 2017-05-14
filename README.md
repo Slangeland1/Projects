@@ -8,7 +8,7 @@ This repo contains projects completed by Stephanie Langeland.
    
     * For the GitHub repository, including all code, data, background, and progress notes, please review the README file (https://github.com/amp5/QMSS_G5069_Applied_D_S)
     
-     * Completed while attending the QMSS program at Columbia University.
+     * Completed as part of the QMSS program at Columbia University.
 
 2) "An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (Apr 2017)
    
@@ -18,7 +18,7 @@ This repo contains projects completed by Stephanie Langeland.
    
    * Refer to the "Data Analysis Final Project" (https://github.com/Slangeland1/Projects/tree/master/An%20Analysis%20of%20the%20Impact%20of%20Neighbors%E2%80%99%20Expectations%20on%20Regional%20Home%20Values_Stephanie%20Langeland) folder for the R code, input files, and paper. 
    
-    * Completed while attending the QMSS program at Columbia University.
+    * Completed as part of the QMSS program at Columbia University.
 
 
 3) "Predicting Weather Trends" (Dec 2016)
@@ -27,7 +27,7 @@ This repo contains projects completed by Stephanie Langeland.
    
    * Refer to the following link for the project:  https://github.com/Slangeland1/Projects/blob/master/Predicting%20Weather%20Trends.pdf
    
-   * Completed while attending the QMSS program at Columbia University.
+   * Completed as part of the QMSS program at Columbia University.
    
 4) "An Empirical Analysis of Strategic Games in the Tri-Party Repo Market" (Mar 2015)
 
