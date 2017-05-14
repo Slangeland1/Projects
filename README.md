@@ -35,6 +35,6 @@ This repo contains projects completed by Stephanie Langeland.
 
    * Presented at the Federal Reserve Bank of Dallas Undergraduate Research Conference. 
       
-   * Refer to the following link for the project:  https://github.com/Slangeland1/Projects/tree/master/An%20Empirical%20Analysis%20of%20Strategic%20Games%20in%20the%20Tri-Party%20Repo%20Market
+   * Refer to the following link for the paper and presentation:  https://github.com/Slangeland1/Projects/tree/master/An%20Empirical%20Analysis%20of%20Strategic%20Games%20in%20the%20Tri-Party%20Repo%20Market
 
 LinkedIn Profile:  https://www.linkedin.com/in/stephanielangeland/
