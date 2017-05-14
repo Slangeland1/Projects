@@ -2,7 +2,7 @@ This repo contains projects completed by Stephanie Langeland.
 
 1) "Stop Don't Hit" (Apr 2017)
 
-   * Data Science group visualized cluster analysis of NYPD Stop, Question and Frisk data by location and volume of stop and frisk events in New York City in 2015 to build forecasting models that predicted the likelihood of being stopped and frisked in certain locations. The goal of the study was to understand the impact of human bias when making the decision the stop, question, and frisk someone based on the demography of the vicinity.
+   * Based on geospatial analysis of 2015 NYPD Stop, Question and Frisk data, determined that the Bronx had the highest volume of stop and frisk events. Analyzed the Bronx to understand the impact of human bias when making the decision the stop, question, and frisk a suspect based on the demography of the vicinity. Results did not produce statistically significant evidence that police officers stop and frisk based on race or gender. Showcased spatial hotspots where more police force was used on people with heavier builds regardless of whether the suspect was armed. 
 
    * Refer to the following link for the final project presentation:  https://github.com/amp5/QMSS_G5069_Applied_D_S/tree/master/Reports.  
    
@@ -12,7 +12,7 @@ This repo contains projects completed by Stephanie Langeland.
 
 2) "An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (Apr 2017)
    
-   * Built a residential real estate model that summarized past, current, and forecasted the future housing market for nine regions of the United States.  The model used homeowners’ opinions of the past value of their homes and expected future values of the homes in their neighborhoods to predict changes in actual home prices.  
+   * Built logistic regression models using past home values and homeowners’ expectations of future neighborhood home values to predict actual home prices for nine regions of the U.S. Yielded a 53% prediction accuracy rate, driven by predictions of downturns in the housing market as a result of the Great Recession. As the housing market improves and more data become available, this model should successfully predict upticks in the market.  
 
    * Logistic regression models, data visualizations, and confusion matrices were run in R.
    
