@@ -1,0 +1,283 @@
+## Functions that I've created:
+
+##:::::::::::::::::::::::: function 1: 
+pr_vars_function <- function(x) {
+  counts <- length(x) ### "Number_of_Observations"
+  
+  missing <- sum(is.na(x)) ### "Number_of_Missing_Values"
+  
+  count_non_na <- counts - missing ### "Number_of_Obersavations_Less_NAs"
+  
+  min_var <- round(
+    (min(x,
+         na.rm = TRUE) * 100), 
+    digits = 4) ### "Minimum__as_Percent"
+  
+  max_var <- round(
+    (max(x,
+     na.rm = TRUE) * 100),
+    digits = 4) ### "Maximum_as_Percent"
+  
+  med_var <- round(
+    (median(x,
+            na.rm = TRUE) * 100),
+    digits = 4) ### "Median_as_Percent"
+  
+  mean_var <- round(
+    (mean(x,
+         na.rm = TRUE) * 100),
+    digits = 4) ### "Mean_as_Percent"
+  
+  sd_var <- round(
+    sd(x,
+       na.rm = TRUE),
+    digits = 4) ### "Standard_Deviation"
+  
+  output <- as.data.frame(
+    matrix(
+      c(
+        "Number_of_Observations",
+        counts,
+        deparse(substitute(x)), ## deparse: Turn unevaluated expressions into character strings; 
+        ## substitute: returns the parse tree for the (unevaluated) expression, substituting any variables bound in env.
+        
+        "Number_of_Missing_Values",
+        missing,
+        deparse(substitute(x)),
+        
+        "Number_of_Obersavations_Less_NAs",
+        count_non_na,
+        deparse(substitute(x)),
+        
+        "Minimum__as_Percent",
+        min_var,
+        deparse(substitute(x)),
+        
+        "Maximum_as_Percent",
+        max_var,
+        deparse(substitute(x)),
+        
+        "Median_as_Percent",
+        med_var,
+        deparse(substitute(x)),
+        
+        "Mean_as_Percent",
+        mean_var,
+        deparse(substitute(x)),
+        
+        "Standard_Deviation",
+        sd_var,
+        deparse(substitute(x))
+        ),
+      ncol = 3,
+      byrow = TRUE))
+  
+  output
+}
+
+ex1_pr <- pr_vars_function(datasetname$varname)
+ex1_pr
+
+ex2_pr <- pr_vars_function(datasetname$varname)
+ex2_pr
+
+pr_table <- rbind( ## merge data frames by row for matching columns
+  ex1_pr,
+  ex2_pr
+)
+
+ex_table
+
+library(tidyr)
+
+ex_table
+
+ex_data <- spread(ex_table, 
+                  V1,
+                  V2)
+
+ex_data 
+
+
+
+
+
+##:::::::::::::::::::::::: function 2: 
+numeric_vars_function <- function(x) {
+  counts <- length(x) ### "Number_of_Observations"
+  
+  missing <- sum(is.na(x)) ### "Number_of_Missing_Values"
+  
+  count_non_na <- counts - missing ### "Number_of_Obersavations_Less_NAs"
+  
+  min_var <- round(
+    min(x,
+         na.rm = TRUE),
+     digits = 0)
+  
+  max_var <- round(
+    max(x,
+         na.rm = TRUE),
+     digits = 0)
+  
+  med_var <- round(
+    median(x,
+         na.rm = TRUE),
+     digits = 0)
+  
+  mean_var <- round(
+    mean(x,
+         na.rm = TRUE),
+     digits = 0)
+  
+  sd_var <- round(
+    sd(x,
+       na.rm = TRUE),
+    digits = 0) ### "Standard_Deviation"
+  
+  output <- as.data.frame(
+    matrix(
+      c(
+        "Number_of_Observations",
+        counts,
+        deparse(substitute(x)),
+        
+        "Number_of_Missing_Values",
+        missing,
+        deparse(substitute(x)),
+        
+        "Number_of_Obersavations_Less_NAs",
+        count_non_na,
+        deparse(substitute(x)),
+        
+        "Minimum",
+        min_var,
+        deparse(substitute(x)),
+        
+        "Maximum",
+        max_var,
+        deparse(substitute(x)),
+        
+        "Median",
+        med_var,
+        deparse(substitute(x)),
+        
+        "Mean",
+        mean_var,
+        deparse(substitute(x)),
+        
+        "Standard_Deviation",
+        sd_var,
+        deparse(substitute(x))
+        ),
+      ncol = 3,
+      byrow = TRUE))
+  
+  output
+}
+
+
+ex1_num <- numeric_vars_function(datasetname$varname)
+ex1_num
+
+ex2_num <- numeric_vars_function(datasetname$varname)
+ex2_num
+
+num_table <- rbind(
+  ex1_num,
+  ex2_num
+)
+
+num_table
+
+num_data <- spread(num_table,
+                   V1, 
+                   V2)
+
+num_data
+
+
+
+::::::::::::::::::::function3: 
+#if (!require("devtools"))
+#  install.packages("devtools")
+#devtools::install_github("jgabry/QMSS_package")
+library(QMSS)
+
+categorical_vars_function1 <- function(x) {
+  counts <- length(x) ### "Number_of_Observations"
+  
+  missing <- sum(is.na(x)) ### "Number_of_Missing_Values"
+  
+  count_non_na <- counts - missing ### "Number_of_Obersavations_Less_NAs"
+
+  output <- as.data.frame(
+    matrix(
+      c(
+        "Number_of_Observations",
+        counts,
+        deparse(substitute(x)),
+        
+        "Number_of_Missing_Values",
+        missing,
+        deparse(substitute(x)),
+        
+        "Number_of_Obersavations_Less_NAs",
+        count_non_na,
+        deparse(substitute(x))
+        ),
+      ncol = 3,
+      byrow = TRUE))
+  
+  output
+}
+
+
+ex1_cat1 <- categorical_vars_function1(datasetname$varname)
+ex1_cat1
+
+ex2_cat1 <- categorical_vars_function1(datasetname$varname)
+ex2_cat1
+
+cat1_table <- rbind(
+  ex1_cat1,
+  ex2_cat1
+)
+
+cat1_table
+
+cat1_data <- spread(cat1_table,
+                    V1, 
+                    V2)
+
+cat1_data
+
+
+
+
+###:::::::::::::::: function4:
+#install.packages("tibble")
+library(tibble)
+
+categorical_vars_function2 <- function(x) {
+  thing <- as.data.frame(Tab(x)) ### create `Tab` data frame
+  thing$name <- rownames(thing) ### get row names
+  thing <- thing[ , c(4, 1:3)] ### reorde columns
+  thing <- remove_rownames(thing) ### delete row names 
+  thing$V3 <- deparse(substitute(x))
+  thing
+}
+
+ex1_cat2 <- categorical_vars_function2(atasetname$varname)
+ex1_cat2
+
+ex2_cat2 <- categorical_vars_function2(atasetname$varname)
+ex2_cat2
+
+cat2_table <- rbind(
+  ex1_cat2,
+  ex2_cat2
+)
+
+
+
