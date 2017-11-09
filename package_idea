@@ -242,3 +242,5 @@ write(R_script_template,
       file = "R_script_template.R")
 
 
+## next: automatically create and update codebook 
+##  next creates and update readme file to explain folders created
