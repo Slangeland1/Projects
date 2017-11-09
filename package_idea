@@ -1,0 +1,244 @@
+## :::::::::::::::::::: File Info:
+## Date: 11/09/17
+## Author: Stephanie Langeland
+## File-Name: `package_idea.rmd`
+## Version:_ 1
+## Previous Versions/Files: None
+## Dependencies: None
+## Purpose: To create an easily way to make your projects reproducible. 
+## Input Files: None
+## Output Files:
+## Data Output: None
+## Required by: Misc.
+## Status: In progress
+## Machine: Windows 7 Desktop
+## R version: 3.4.1 (2017-06-30) -- "Single Candle"
+
+
+
+## :::::::::::::::::::: Set Up Folder Structure:
+## :::::::::: Master Folder:
+path <- "H:/GOSR-Research and Strategic Analysis/R Tutorials/master_folder"
+dir.create(path)
+setwd(path)
+
+## :::::::::: Subfolders:
+## ::::: Code:
+dir.create(
+  paste0(
+    path,
+    "/code"
+  )
+)
+
+path_code <- paste0(
+  path,
+  "/code"
+)
+
+path_code
+
+dir.create(
+  paste0(
+    path,
+    "/code/outdated"
+  )
+)
+
+path_code_outdated <- paste0(
+  path,
+  "/code/outdated"
+)
+
+path_code_outdated
+
+
+## ::::: Reports:
+dir.create(
+  paste0(
+    path,
+    "/reports"
+  )
+)
+
+path_reports <- paste0(
+  path,
+  "/reports"
+)
+
+path_reports
+
+dir.create(
+  paste0(
+    path,
+    "/reports/outdated"
+  )
+)
+
+path_reports_outdated <- paste0(
+  path,
+  "/reports/outdated"
+)
+
+path_reports_outdated
+
+
+## ::::: Input Files:
+dir.create(
+  paste0(
+    path,
+    "/input_files"
+  )
+)
+
+path_input_files <- paste0(
+  path,
+  "/input_files"
+)
+
+path_input_files
+
+dir.create(
+  paste0(
+    path,
+    "/input_files/outdated"
+  )
+)
+
+path_input_files_outdated <- paste0(
+  path,
+  "/input_files/outdated"
+)
+
+path_input_files_outdated
+
+
+## ::::: Output Files:
+dir.create(
+  paste0(
+    path,
+    "/output_files"
+  )
+)
+
+path_output_files <- paste0(
+  path,
+  "/output_files"
+)
+
+path_output_files
+
+dir.create(
+  paste0(
+    path,
+    "/output_files/outdated"
+  )
+)
+
+path_output_files_outdated <- paste0(
+  path,
+  "/output_files/outdated"
+)
+
+path_output_files_outdated
+
+
+## ::::: Data Info:
+dir.create(
+  paste0(
+    path,
+    "/data_info"
+  )
+)
+
+path_data_info <- paste0(
+  path,
+  "/data_info"
+)
+
+path_data_info
+
+
+dir.create(
+  paste0(
+    path,
+    "/data_info/outdated"
+  )
+)
+
+path_data_info_outdated <- paste0(
+  path,
+  "/data_info/outdated"
+)
+
+path_data_info_outdated
+
+
+## ::::: Raw Data:
+dir.create(
+  paste0(
+    path,
+    "/raw_data"
+  )
+)
+
+path_raw_data <- paste0(
+  path,
+  "/raw_data"
+)
+
+path_raw_data
+
+dir.create(
+  paste0(
+    path,
+    "/raw_data/outdated"
+  )
+)
+
+path_raw_data_outdated <- paste0(
+  path,
+  "/raw_data/outdated"
+)
+
+path_raw_data_outdated
+
+
+
+## :::::::::::::::::::: Set Up Standard Code Template:
+
+
+R_script_template <- print(c(
+"## :::::::::::::::::::: File Info:",
+"## Date:",
+"## Author:",
+"## File-Name:",
+"## Version:",
+"## Previous Versions/Files:",
+"## Dependencies:",
+"## Purpose:",
+"## Input Files:",
+"## Output Files:",
+"## Data Output:",
+"## Required by:",
+"## Status:",
+"## Machine:",
+"## R version:",
+"\n",
+"\n",
+"## :::::::::::::::::::: <HEADER 1>:",
+"rm(list = ls(all = TRUE)) ## cleans the work space",
+"\n",
+"## :::::::::: <HEADER 2>:",
+"\n",
+"## ::::: <HEADER 3>:",
+"\n",
+"\n"
+)
+)
+
+setwd(path_code)
+write(R_script_template,
+      file = "R_script_template.R")
+
+
