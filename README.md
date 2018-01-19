@@ -5,7 +5,7 @@ __The following is a compilation of small projects to demonstrate various skills
 
   * [SQL in R](https://github.com/Slangeland1/Projects/blob/master/SQL%20in%20R/Langeland_Stephanie_hw10.md)
 
-  * [Text Mining]()
+  * [Text Mining](https://github.com/Slangeland1/Projects/blob/master/Text%20Mining/Langeland_Stephanie_hw06.md)
   
   * [Web Scraping](https://github.com/Slangeland1/Projects/blob/master/Web%20Scraping/Langeland_Stephanie_hw09.md)
   
