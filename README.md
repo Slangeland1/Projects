@@ -9,7 +9,7 @@ __The following is a compilation of small projects to demonstrate various skills
   
   * [Web Scraping](https://github.com/Slangeland1/Projects/blob/master/Web%20Scraping/Langeland_Stephanie_hw09.md)
   
-  * [Writing an API Client]()
+  * [Writing an API Client](https://github.com/Slangeland1/Projects/blob/master/Writing%20an%20API%20Client/Langeland_Stephanie_hw08.md)
 
 __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (April 2017)__
    
