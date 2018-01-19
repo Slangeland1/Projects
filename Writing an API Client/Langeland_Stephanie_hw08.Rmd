@@ -27,23 +27,6 @@ Writing a simple API client
 
 To accommodate your different interests and data needs, this exercise asks you to choose a data API yourself. It is perfectly fine if the data collection from such an API is useful for another class, project, or your thesis. 
 
-Here are a couple of suggestions for API choices:
-
-**Select one API of your choice**:
-
-- A huge huge list of almost 20 thousand APIs – you should have no trouble finding one you have some interest in! http://www.programmableweb.com/category/all/apis
-
-Here are some fun ones: 
-
-- Weather: https://openweathermap.org/api and https://www.wunderground.com/weather/api/
-- Beer: http://www.brewerydb.com/developers  
-- Nutrition: https://www.nutritionix.com/business/api and https://ndb.nal.usda.gov/ndb/api/doc 
-- Reddit: https://www.reddit.com/dev/api/  
-- Youtube: https://developers.google.com/youtube/
-- Marvel Comics: https://developer.marvel.com/
-
-Or any other data API you can find on the internet.
-
 ### Task
 
 The task is to use the `httr` package (do not use possibly existing specific R packages for the API) to:  
