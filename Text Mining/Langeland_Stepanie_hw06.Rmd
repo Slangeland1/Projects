@@ -59,7 +59,7 @@ library(stringr)
 z_words <- str_subset(words$word,
                           "z")
 
-z_words
+head(z_words)
 ```
 
 Among the z-words, tabulate how many `z`'s the words contain (i.e. how many words 
@@ -154,7 +154,7 @@ Are there words that start with two or more vowels?
 vowels_2_st <- str_subset(words$word,
                           pattern = "^[aeiouAEiou]{2,}")
 
-vowels_2_st
+head(vowels_2_st)
 
 length(vowels_2_st)
 ```
@@ -179,9 +179,13 @@ new_string <- tolower(words$word)
 Words that comply with the rule:
 
 ```{r}
-str_view(new_string, 
+comply <- str_view(new_string, 
          "(cei|[^c]ie)", ## "cei" or "ie" not preceded by "c"
          match = TRUE)
+
+comply_list <- as.list(comply)
+
+head(comply_list)
 ```
 
 Words that do not comply with the rule:
