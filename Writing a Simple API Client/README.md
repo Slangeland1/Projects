@@ -1,5 +1,5 @@
 # Langeland_Stephanie
-Stephanie Langeland's (UNI: sal2209) assignments for Modern Data Structures (Fall 2017)
+Stephanie Langeland's assignments for Modern Data Structures (Fall 2017)
 
 Homework #8:
 
