@@ -22,7 +22,7 @@ __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Value
    As the housing market improves and more data become available, this model should
    successfully predict upticks in the market.  
 
-  * [Click here for the R code, input files, and paper](https://github.com/Slangeland1/Projects/tree/master/An%20Analysis%20of%20the%20Impact%20of%20Neighbors%E2%80%99%20Expectations%20on%20Regional%20Home%20Values_Stephanie%20Langeland) 
+  * [Click here for the R code, input files, and paper.](https://github.com/Slangeland1/Projects/tree/master/An%20Analysis%20of%20the%20Impact%20of%20Neighbors%E2%80%99%20Expectations%20on%20Regional%20Home%20Values_Stephanie%20Langeland) 
    
 __"Stop Don't Hit" (April 2017)__
 
