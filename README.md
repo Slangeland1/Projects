@@ -27,7 +27,7 @@ __"Stop Don't Hit" (April 2017)__
   spatial hotspots where more police force was used on people with heavier
   builds regardless of whether the suspect was armed. 
 
-  * [Click here for the final project presentation](https://github.com/amp5/QMSS_G5069_Applied_D_S/tree/master/Reports).  
+  * [Click here for the final project presentation](https://github.com/amp5/QMSS_G5069_Applied_D_S/blob/master/Reports/Stop%20Don't%20Hit%20Final%20Presentation.pdf).  
    
   * [Click here for the GitHub repository](https://github.com/amp5/QMSS_G5069_Applied_D_S),
     which includes all code, data, background, and progress notes, __please review the README file.__
