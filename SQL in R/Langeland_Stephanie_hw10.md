@@ -19,7 +19,7 @@ Services. Use the code below to connect to the database.
 library(DBI)
 ```
 
-Connection code hidden for sceurity purposes.
+Connection code hidden for security purposes.
 
 
 ```

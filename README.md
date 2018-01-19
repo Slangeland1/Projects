@@ -3,7 +3,7 @@ Stephanie Langeland's LinkedIn Profile:  https://www.linkedin.com/in/stephaniela
 
 __The following is a compilation of small projects to demonstrate various skills:__
 
-  * [SQL in R]()
+  * [SQL in R](https://github.com/Slangeland1/Projects/blob/master/SQL%20in%20R/Langeland_Stephanie_hw10.md)
 
   * [Working with text data.](https://github.com/Slangeland1/Projects/blob/master/Text%20Mining/Langeland_Stepanie_hw06.md)
   
