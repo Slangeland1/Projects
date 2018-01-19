@@ -1,0 +1,284 @@
+---
+title: "QMSS G5072 Homework 8"
+author: Stephanie Langeland
+date: 2017-11-07
+always_allow_html: yes
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r Setup, include = FALSE, results = 'hide', warning = FALSE}
+#install.packages("knitr")
+library(knitr)
+opts_chunk$set(fig.path = "images/",
+               cache.path = "cache/",
+               cache = FALSE,
+               echo = TRUE, 
+               message = FALSE, 
+               warning = FALSE
+               )
+```
+
+Writing a simple API client
+============================
+
+### Choose your API
+
+To accommodate your different interests and data needs, this exercise asks you to choose a data API yourself. It is perfectly fine if the data collection from such an API is useful for another class, project, or your thesis. 
+
+Here are a couple of suggestions for API choices:
+
+**Select one API of your choice**:
+
+- A huge huge list of almost 20 thousand APIs – you should have no trouble finding one you have some interest in! http://www.programmableweb.com/category/all/apis
+
+Here are some fun ones: 
+
+- Weather: https://openweathermap.org/api and https://www.wunderground.com/weather/api/
+- Beer: http://www.brewerydb.com/developers  
+- Nutrition: https://www.nutritionix.com/business/api and https://ndb.nal.usda.gov/ndb/api/doc 
+- Reddit: https://www.reddit.com/dev/api/  
+- Youtube: https://developers.google.com/youtube/
+- Marvel Comics: https://developer.marvel.com/
+
+Or any other data API you can find on the internet.
+
+### Task
+
+The task is to use the `httr` package (do not use possibly existing specific R packages for the API) to:  
+
+  - interact with the API  
+  - create a dataset with multiple records by requesting data from the API using the `httr` package  
+  - write a simple API client, i.e. a function that would make downloading/interacting with the API simple for a R user who does not know `httr` 
+
+#### 1. Choose an API
+
+a) Choose an API and briefly describe the type of data you can obtain from it.
+
+  * The Research Division of the Federal Reserve Bank of Saint Louis developed 
+  FRED.  [FRED](https://research.stlouisfed.org/about.html) is a database that 
+  offers regional and national financial and economic data and information to 
+  enhance economic research.  FRED is constantly updated and accessible at all times.
+  The FRED API allows users to retrieve economic data from FRED.  API requests can be 
+  tailored to retrieve data source, release, category, series, and more.
+  
+b) Provide a link to the API documentation and  
+
+  * https://research.stlouisfed.org/docs/api/fred/series_observations.html
+
+c) the base URL of the API you intend to use.
+
+```{r}
+base_url <- "https://api.stlouisfed.org/fred/series/observations?"
+```
+
+#### 2. Authentication
+
+a) Briefly explain how the API authenticates the user. 
+
+  * The user adds a `series_id=` number, which denotes the type of data they want to
+  retrieve plus their API key (`api_key=`) to the base url (`base_url`) noted above.
+
+b) Apply for an API key if necessary and provide the information (with relevant 
+URL) how that can be done.
+
+  * Users must register for a FRED API Key [here](https://research.stlouisfed.org/docs/api/api_key.html).
+
+#### 3. Send a Simple GET request
+
+a) Execute a simple get request to obtain a small amount of data from the API. 
+Describe a few query parameters and add them to the query. If you have a choice 
+of the output the API returns (e.g. XML or JSON), I suggest to choose JSON 
+because it easier to work with. Your output here should include the code for 
+the `GET` request, including the query parameters.  
+
+  * Query Real Gross Domestic Product data from 01/01/1947 - 01/01/2017.  The
+  output format is json. 
+
+```{r}
+library(httr)
+
+GDPC1_response <- GET(
+  base_url,
+  query = list(
+    "series_id" = "GDPC1", ## GDPC1 id number
+    "observation_start" = "1947-01-01", ## data start date
+    "observation_end" = "2017-01-01", ## data end date
+    "api_key" = Sys.getenv("FRED_API"), ## my api key 
+    "frequency" = "sa", ## semi-annual frequency
+    "file_type" = "json"
+    )
+  )
+```
+
+b) Check of the status of the request (using `http_status`).  
+
+```{r}
+http_status(GDPC1_response)
+```
+
+c) Check the type of the response (e.g. XML, JSON, csv using `http_type`).
+
+```{r}
+http_type(GDPC1_response)
+```
+
+#### 4. Parse the response and Create a dataset
+
+a) Take the response returned by the API and turn it into a useful R object 
+(e.g. a list, vector, or data frame). Show the code how this is done.
+
+```{r}
+GDPC1_import <- content(GDPC1_response, 
+                          as = "text")
+
+library(jsonlite)
+GDPC1_data <- fromJSON(GDPC1_import, 
+                         simplifyDataFrame = TRUE)
+
+str(GDPC1_data)
+```
+
+b) Using the API, create a dataset (in data frame format) for multiple records. 
+I'd say a sample size greater than 100 is sufficient for the example but feel 
+free to get more data if you feel ambitious and the API allows you to do that 
+fairly easily. The dataset can include only a small subset of the returned data. 
+Just choose some interesting features. There is no need to be inclusive here.
+
+```{r}
+GDPC1_df <- as.data.frame(GDPC1_data)
+dim(GDPC1_df)
+```
+
+c) Provide some summary statistics of the data.
+
+```{r}
+## Prepare Data for Summary Statistics:
+str(GDPC1_df)
+GDPC1_df$realtime_start <- as.Date(GDPC1_df$realtime_start)
+GDPC1_df$realtime_end <- as.Date(GDPC1_df$realtime_end)
+GDPC1_df$observation_start <- as.Date(GDPC1_df$observation_start)
+GDPC1_df$observation_end <- as.Date(GDPC1_df$observation_end)
+GDPC1_df$observations.date <- as.Date(GDPC1_df$observations.date)
+GDPC1_df$observations.value <- as.numeric(GDPC1_df$observations.value)
+```
+
+  * Summary Statistics of Real Gross Domestic Product:
+
+```{r, warning = FALSE, message = FALSE}
+summary(GDPC1_df$observations.value)
+
+library(ggplot2)
+
+ggplot(data = GDPC1_df,
+       aes(x = observations.date,
+           y = observations.value,
+           fill = observations.value)) +
+  geom_bar(stat = "identity") +
+  geom_smooth(color = "#FF8888") +
+  ggtitle("U.S. Real Gross Domestic Product") +
+  xlab("Year") +
+  ylab("Real GDP (USD)")
+
+GDPC1_df[ , c("observations.date", "observations.value")]
+```
+
+Include the data frame in a .RDS file (using `saveRDS`) called `data.rds` 
+with your submission for the grader.
+
+```{r}
+setwd("/Users/StephanieLangeland/Desktop/Columbia/Modern Data Structures/Langeland_Stephanie/hw08")
+
+saveRDS(GDPC1_df,
+        file = "data.RDS")
+```
+
+#### 5. API Client
+
+Lastly, let's try to wrap the code from the previous sections into a simple API client. For example, in the `ZillowR` package, the command `GetSearchResults()` can be called with the following command
+
+    GetSearchResults(address = '2114 Bigelow Ave', citystatezip = 'Seattle, WA')
+
+For your API package, try to create a simple function that does the following things:
+
+ - allows to user to specify some smallish set of query parameters (from Q.3a)  
+ - run a GET request with these parameters  
+ - check the status of the request the server returns and inform the user of any errors (from Q.3b)  
+ - parse the response and return a R object to the user of the function. You can choose whether returning a list (from Q.4a) or a data frame (from Q.4b) is best.  
+
+For the grader, please provide the following output.
+
+a) Your full function to access the API functionality. Set some sensible default values for the query parameters. 
+
+b) The object your function returns for the default values. Please save this output object to `api_client_output.RDS` and include it with your submission.
+
+For this part of the question, I am not expecting a full-fledged API client. Rather, I want you to wrap some of the code from the previous questions into a function and generalize a bit. For guidance on how writing an API client with more bells and whistles would look like, see Wickham's ["Best practices for API packages"](https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html
+).
+
+This function is to retrieve series observations in json format from FRED using 
+a FRED API key:
+
+```{r}
+library(httr)
+library(jsonlite)
+
+get_series_obs <- function(series_id, 
+                           observation_start = "1947-01-01", ## default value 
+                           observation_end = "2017-11-06",  ## default value 
+                           user_api, 
+                           frequency = "sa", ## default value = semi annual
+                           name_rds = "api_client_output.RDS"
+                           ) {
+  start_url <- "https://api.stlouisfed.org/fred/series/observations?"
+  
+  response <- GET(
+    start_url,
+    query = list(
+      
+      "series_id" = series_id,
+
+      "observation_start" = observation_start,
+     
+      "observation_end" = observation_end,
+      
+      "api_key" = user_api,
+      
+      "frequency" = frequency,
+    
+      "file_type" = "json"
+      )
+    )
+  
+  output <- if(http_error(response) == TRUE){
+    http_error(response)
+    } else {
+      content(response,
+              as = "text")
+      }
+
+  dataset <- jsonlite::fromJSON(output, 
+                                simplifyDataFrame = TRUE)
+  
+  save_rds <- saveRDS(dataset,
+                      file = name_rds)
+  
+  dataset
+}
+
+## To demonstrate that the default values work:
+get_series_obs(
+  series_id = "GDPC1",
+  user_api = Sys.getenv("FRED_API")
+  )
+
+## To demonstrate a more specific query that does not rely on default values: 
+get_series_obs(
+  series_id = "GDPC1",
+  observation_start = "2011-01-01",
+  observation_end = "2017-01-01",
+  user_api = Sys.getenv("FRED_API"),
+  frequency = "a",
+  name_rds = "api_client_output_example2.RDS"
+  )
+```
