@@ -51,5 +51,5 @@ __"An Empirical Analysis of Strategic Games in the Tri-Party Repo Market" (March
   * One of thirty papers selected to present findings at the __Federal Reserve__
   __Bank of Dallas Undergraduate Research Conference.__
 
-[Click here for the paper and presentation](https://github.com/Slangeland1/Projects/tree/master/An%20Empirical%20Analysis%20of%20Strategic%20Games%20in%20the%20Tri-Party%20Repo%20Market)
+  * [Click here for the paper and presentation](https://github.com/Slangeland1/Projects/tree/master/An%20Empirical%20Analysis%20of%20Strategic%20Games%20in%20the%20Tri-Party%20Repo%20Market)
 
