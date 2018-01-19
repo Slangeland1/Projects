@@ -14,8 +14,6 @@ __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Value
 
   * [Click here for the R code, input files, and paper](https://github.com/Slangeland1/Projects/tree/master/An%20Analysis%20of%20the%20Impact%20of%20Neighbors%E2%80%99%20Expectations%20on%20Regional%20Home%20Values_Stephanie%20Langeland) 
    
-    * Completed as part of the QMSS program at Columbia University.
-
 __"Stop Don't Hit" (April 2017)__
 
   * Based on __geospatial analysis__ of 2015 NYPD Stop, Question and Frisk
@@ -32,8 +30,6 @@ __"Stop Don't Hit" (April 2017)__
   * [Click here for the GitHub repository](https://github.com/amp5/QMSS_G5069_Applied_D_S),
     which includes all code, data, background, and progress notes, __please review the README file.__
     
-  * Completed as part of the QMSS program at Columbia University.
-
 __"Predicting Weather Trends" (December 2016)__
    
   * I used exploratory data analysis to display and understand trends in weather
@@ -48,8 +44,6 @@ __"Predicting Weather Trends" (December 2016)__
   prediction accuracy in the testing data.
    
   * [Click here for the project output.](https://github.com/Slangeland1/Projects/blob/master/Predicting%20Weather%20Trends.pdf)
-   
-  * Completed as part of the QMSS program at Columbia University.
    
 __"An Empirical Analysis of Strategic Games in the Tri-Party Repo Market" (March 2015)__
 
