@@ -1,0 +1,106 @@
+---
+title: "Vignette: `get_yf_url`, `scroll_yf`, `parse_yf`, and `clean_yf_data` Functions"
+author: "Stephanie Langeland"
+date: "2017-12-11"
+output: 
+  html_document:
+      keep_md: true
+vignette: >
+  %\VignetteIndexEntry{all_yf_functions Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+__Package:__ `EconFiData`
+
+__Purpose:__ To demonstrate how the `get_yf_url`, `scroll_yf`, `parse_yf`, and
+`clean_yf_data` functions work together to obtain clean Yahoo Finance Data.
+
+__Disclaimer:__ PLEASE NOTE THAT THIS FUNCTION WAS CREATED ON 2017-11-22.  
+THEREFORE, THIS FUNCTION MAY BECOME OBSOLETE IF YAHOO FINANCE CHANGES THE 
+WEBSITE CONFIGURATION AFTER  2017-11-22 AS THIS FUNCTION USES WEB SCRAPPING 
+TECHNIQUES.
+
+__`get_yf_url` Description:__  This function creates a Yahoo Finance URL to access 
+historical quote data.
+
+__`scroll_yf` Description:__  This function scrolls down a yahoo finance 
+historical quote data page in order to load the data since Yahoo Finance 
+only loads the data that is seen by the user on the screen i.e. the user 
+must scroll down to view all data because more data loads as the user 
+scrolls down.  
+
+__`parse_yf` Description:__  This function parses the data obtained from web 
+scrapping historical quote Yahoo Finance data.  The output is saved in a data 
+frame. 
+
+__`clean_yf_data` Description:__  This function cleans the historical Yahoo 
+Finance quote data that was parsed using "parse_yf()".  The output is saved 
+as a data frame and RDS file.
+
+__Note:__ The following was run using Google Chrome on a MacBook Pro.
+
+```{r, message = FALSE, warning = FALSE}
+## :::::::::::::::::: Part 1: Create the Yahoo Finance URL:
+
+library(rvest)
+library(EconFiData)
+
+final_url <- get_yf_url(start_date = "2017-01-01",
+                        end_date = "2017-12-02",
+                        ticker = "%5EVIX")
+
+
+
+## :::::::::::::::::: Part 2: Scrape Yahoo Finance Historical Data:
+
+## step 1 (initial install): Install Docker: Run in Terminal: "brew cask install docker"
+## step 2: open docker in apps
+## step 3: start docker
+## step 4: download Chrome's latest web driver: https://sites.google.com/a/chromium.org/chromedriver/downloads
+## step 5: start docker app
+
+library(RSelenium) 
+
+setwd("/Users/StephanieLangeland") ## step 6: this folder contains the chrone web driver
+
+system('docker run -d -p 4445:4444 selenium/standalone-chrome') ## step 7
+
+remDr <- remoteDriver(remoteServerAddr = "localhost", ## step 8: establish server connection
+                      port = 4445L, 
+                      browserName = "chrome")
+
+remDr$open() ## step 9: connect to  Selenium server web driver
+
+remDr$navigate(final_url) ## step 10: navigate to desired webpage
+
+remDr$getTitle() ## step 11: check title to verify that the correct webpage loaded
+
+## step 12: scroll down to bottom of page 5 times with 3 seconds of loading time:
+scroll_yf(5)
+
+page_source <- remDr$getPageSource() ## step 13: get the page html
+
+library(XML)
+
+vix_data <- parse_yf(set_page_source = page_source)
+
+
+
+## :::::::::::::::::: Part 3: Clean and save data set:
+
+head(vix_data) 
+
+str(vix_data)
+
+vix_data <- clean_yf_data(final_df = vix_data,
+              set_column_names = "vix",
+              wd = "/Users/StephanieLangeland/Desktop/",
+              RDSfilename = "VIX")
+
+head(vix_data)
+
+str(vix_data)
+
+```
+
