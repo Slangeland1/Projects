@@ -1,16 +1,8 @@
 # Langeland_Stephanie
-Stephanie Langeland's (UNI: sal2209) assignments for Modern Data Structures (Fall 2017)
+Stephanie Langeland's Final Project for Modern Data Structures (Fall 2017 - QMSS, Columbia University)
 
 File Name:  Description 
 
-`Langeland_Stephanie_final_project_proposal.Rmd`:  Code for the final project 
-proposal.  
-
-  * `Langeland_Stephanie_final_project_proposal.md`:  Knit .md file.
-  
-  * `Langeland_Stephanie_final_project_proposal.html`:  Knit .rmd file 
-  with all code.
-  
 `Langeland_Stephanie_final_project.Rmd`:  Code for the final project summary page.  
 
   * `Langeland_Stephanie_final_project.md`:  Knit .md file. 
