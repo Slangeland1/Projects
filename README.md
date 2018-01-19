@@ -1,4 +1,4 @@
-This repo contains projects completed by Stephanie Langeland.
+__Coding Portfolio:__ This repo contains select projects completed by Stephanie Langeland.
 Stephanie Langeland's LinkedIn Profile:  https://www.linkedin.com/in/stephanielangeland/
 
 
@@ -32,17 +32,24 @@ heavier builds regardless of whether the suspect was armed.
 
 __"Predicting Weather Trends" (December 2016)__
    
-   * I used exploratory data analysis to display and understand trends in weather data from Weather Underground. After exploring the data, I used actual mean temperature, actual minimum temperature, actual maximum temperature, average minimum temperature, average maximum temperature, record minimum temperature, record maximum temperature, actual precipitation, and record precipitation to predict whether average precipitation was above or below the overall average precipitation rate of 0.11. Linear and quadratic models were fit using lasso, logit, and partial least squares regression. The goal was to find a model with the lowest MSE (mean squared error) and most importantly, the highest rate of prediction accuracy in the testing data.
+I used exploratory data analysis to display and understand trends in weather data from Weather Underground. After exploring the data, I used actual mean temperature, actual minimum temperature, actual maximum temperature, average minimum temperature, average maximum temperature, record minimum temperature, record maximum temperature, actual precipitation, and record precipitation to predict whether average precipitation was above or below the overall average precipitation rate of 0.11. Linear and quadratic models were fit using lasso, logit, and partial least squares regression. The goal was to find a model with the lowest MSE (mean squared error) and most importantly, the highest rate of prediction accuracy in the testing data.
    
-   * Refer to the following link for the project: [here](https://github.com/Slangeland1/Projects/blob/master/Predicting%20Weather%20Trends.pdf)
+[Click here](https://github.com/Slangeland1/Projects/blob/master/Predicting%20Weather%20Trends.pdf) for the project.
    
    * Completed as part of the QMSS program at Columbia University.
    
 __"An Empirical Analysis of Strategic Games in the Tri-Party Repo Market" (March 2015)__
 
-   * This paper discusses the strategies of clearing banks, securities dealers, and cash investors in the tri-party repo market using game theory and multiple regression analysis. Data from the Federal Reserve Bank of New York, Bank of New York Mellon, and the Bureau of Economic Analysis were recorded on a quarterly basis after the Primary Dealer Credit Facility’s closure, from February 2010 through September 2014. Empirical results indicate that real Gross Domestic Product and the collateral value of agency mortgage-backed securities for repos significantly influence tri-party repo activity. These factors can motivate players’ strategies, which partly determines the size of the tri-party repo market and supports game theoretic insights about this market’s sensitivity to strategic and external uncertainty.
+   * Extended previous game theory research to multiple regression analysis to
+   compare actual market conditions against potential factors that may influence
+   strategic decisions of tri-party repo market participants.
 
-   * Presented at the Federal Reserve Bank of Dallas Undergraduate Research Conference. 
-      
-   * Refer to the following link for the paper and presentation:  https://github.com/Slangeland1/Projects/tree/master/An%20Empirical%20Analysis%20of%20Strategic%20Games%20in%20the%20Tri-Party%20Repo%20Market
+  * Empirical results used to formulate monetary policy recommendations aimed
+  at enhancing firm and central bank preparedness for systemic crises arising
+  from behavioral shifts of market participants.
+
+  * One of thirty papers selected to present findings at the __Federal Reserve__
+  __Bank of Dallas Undergraduate Research Conference.__
+
+[Click here for the paper and presentation](https://github.com/Slangeland1/Projects/tree/master/An%20Empirical%20Analysis%20of%20Strategic%20Games%20in%20the%20Tri-Party%20Repo%20Market)
 
