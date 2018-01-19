@@ -1,6 +1,12 @@
-# QMSS G5072 Homework 10
-Stephanie Langeland  
-2017-11-22  
+---
+title: "QMSS G5072 Homework 10"
+author: Stephanie Langeland 
+date: 2017-11-22
+always_allow_html: yes
+output: 
+  html_document:
+    keep_md: true
+---
 
 Practicing SQL Queries
 ============================
@@ -11,16 +17,10 @@ Services. Use the code below to connect to the database.
 
 ```r
 library(DBI)
-# Connection
-witch_con <- dbConnect(RMySQL::MySQL(),
-      dbname = "witchcraft",
-      host = "tbrambor.cqejfaflibld.us-east-2.rds.amazonaws.com",
-      port = 3306,
-      user = "student",
-      password = "mds-is-fun")
-
-witch_con
 ```
+
+Connection code hidden for sceurity purposes.
+
 
 ```
 ## <MySQLConnection:0,0>

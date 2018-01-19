@@ -16,7 +16,11 @@ Services. Use the code below to connect to the database.
 
 ```{r}
 library(DBI)
-# Connection
+```
+
+Connection code hidden for sceurity purposes.
+
+```{r, echo = FALSE}
 witch_con <- dbConnect(RMySQL::MySQL(),
       dbname = "witchcraft",
       host = "tbrambor.cqejfaflibld.us-east-2.rds.amazonaws.com",
