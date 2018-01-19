@@ -5,13 +5,13 @@ __Coding Portfolio:__ This repo contains select projects completed by Stephanie 
 
 __The following is a compilation of small projects to demonstrate various skills:__
 
-  * [SQL in R](https://github.com/Slangeland1/Projects/blob/master/SQL%20in%20R/Langeland_Stephanie_hw10.md)
+  * [SQL in R Project](https://github.com/Slangeland1/Projects/blob/master/SQL%20in%20R/Langeland_Stephanie_hw10.md)
 
-  * [Text Mining](https://github.com/Slangeland1/Projects/blob/master/Text%20Mining/Langeland_Stephanie_hw06.md)
+  * [Text Mining Project](https://github.com/Slangeland1/Projects/blob/master/Text%20Mining/Langeland_Stephanie_hw06.md)
   
-  * [Web Scraping](https://github.com/Slangeland1/Projects/blob/master/Web%20Scraping/Langeland_Stephanie_hw09.md)
+  * [Web Scraping Project](https://github.com/Slangeland1/Projects/blob/master/Web%20Scraping/Langeland_Stephanie_hw09.md)
   
-  * [Writing an API Client](https://github.com/Slangeland1/Projects/blob/master/Writing%20an%20API%20Client/Langeland_Stephanie_hw08.md)
+  * [Writing an API Client Project](https://github.com/Slangeland1/Projects/blob/master/Writing%20an%20API%20Client/Langeland_Stephanie_hw08.md)
 
 __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (April 2017)__
    
