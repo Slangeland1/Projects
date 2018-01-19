@@ -1,5 +1,5 @@
 __Coding Portfolio:__ This repo contains select projects completed by Stephanie Langeland.
-Stephanie Langeland's LinkedIn Profile:  https://www.linkedin.com/in/stephanielangeland/
+[Stephanie Langeland's LinkedIn Profile](https://www.linkedin.com/in/stephanielangeland/)
 
 __The following is a compilation of small projects to demonstrate various skills:__
 
