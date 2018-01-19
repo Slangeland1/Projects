@@ -187,17 +187,3 @@ get_wiki_info("Jeff_Flake")
 
 get_wiki_info("Susan_Collins")
 ```
-
-####  5. Get all senators' pages
-**_(Optional, for bonus points)_**
-
-a) On this page (https://en.wikipedia.org/wiki/Current_members_of_the_United_States_Senate) 
-you find a list of all current senators of the U.S. congress.  
-Import the site and obtain a vector with the URLs for the Wikipedia sites of 
-all 100 members of congress (hint: the function `xml_attr` is one option). 
-Note, this should only include the URLs and remove all other content.  
-
-b) Create a loop that uses your `get_wiki_info` function to import the information on political party and number of children for all members of the senate.  
-
-c) Clean up your data to provide some summary statistics. How many children does the average senator have? What about by party affiliation? 
-

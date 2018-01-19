@@ -1,6 +1,12 @@
-# QMSS G5072 Homework 9
-Stephanie Langeland  
-2017-11-14  
+---
+title: "QMSS G5072 Homework 9"
+author: Stephanie Langeland 
+date: 2017-11-14
+always_allow_html: yes
+output: 
+  html_document:
+    keep_md: true
+---
 
 
 Web Scraping with Selectors
@@ -26,23 +32,15 @@ library(httr)
 wiki_url <- "https://en.wikipedia.org/wiki/Mitch_McConnell"
 
 wiki_import <- GET(wiki_url)
-```
-
-```
-## Warning in strptime(x, fmt, tz = "GMT"): unknown timezone 'default/America/
-## New_York'
-```
-
-```r
 wiki_import
 ```
 
 ```
 ## Response [https://en.wikipedia.org/wiki/Mitch_McConnell]
-##   Date: 2017-11-12 17:42
+##   Date: 2018-01-19 16:33
 ##   Status: 200
 ##   Content-Type: text/html; charset=UTF-8
-##   Size: 408 kB
+##   Size: 412 kB
 ## <!DOCTYPE html>
 ## <html class="client-nojs" lang="en" dir="ltr">
 ## <head>
@@ -128,7 +126,7 @@ vcard_text
 ```
 
 ```
-## [1] "Mitch McConnell\n\n\nSenate Majority Leader\n\nIncumbent\n\nAssumed office\nJanuary 3, 2015\nDeputy\nJohn Cornyn\nPreceded by\nHarry Reid\nUnited States Senator\nfrom Kentucky\n\nIncumbent\n\nAssumed office\nJanuary 3, 1985\nServing with Rand Paul\nPreceded by\nWalter Huddleston\nSenate Minority Leader\nIn office\nJanuary 3, 2007 – January 3, 2015\nDeputy\nTrent LottJon KylJohn Cornyn\nPreceded by\nHarry Reid\nSucceeded by\nHarry Reid\nSenate Majority Whip\nIn office\nJanuary 3, 2003 – January 3, 2007\nLeader\nBill Frist\nPreceded by\nHarry Reid\nSucceeded by\nDick Durbin\nChair of the Senate Rules Committee\nIn office\nJanuary 20, 2001 – June 6, 2001\nPreceded by\nChris Dodd\nSucceeded by\nChris Dodd\nIn office\nJanuary 3, 1999 – January 3, 2001\nPreceded by\nJohn Warner\nSucceeded by\nChris Dodd\nJudge-Executive of Jefferson County\nIn office\n1977–1984\nPreceded by\nTodd Hollenbach III\nSucceeded by\nBremer Ehrler\nUnited States Assistant Attorney General for the Office of Legislative Affairs\nIn office\n1975Acting\nPresident\nGerald Ford\nPreceded by\nVincent Rakestraw\nSucceeded by\nMichael Uhlmann\n\nPersonal details\nBorn\nAddison Mitchell McConnell Jr.(1942-02-20) February 20, 1942 (age 75)Sheffield, Alabama, U.S.\nPolitical party\nRepublican\nSpouse(s)\nSherrill Redmon (m. 1968;  div. 1980)Elaine Chao (m. 1993)\nChildren\n3\nEducation\nUniversity of Louisville (BA)University of Kentucky (JD)\nNet worth\n$22.5 million (estimate)[1]\nSignature\n\nWebsite\nSenate website\nMilitary service\nAllegiance\n United States\nService/branch\n United States Army\nYears of service\n1967\nUnit\nUnited States Army Reserve\n"
+## [1] "Mitch McConnell\n\n\nSenate Majority Leader\n\nIncumbent\n\nAssumed office\nJanuary 3, 2015\nDeputy\nJohn Cornyn\nPreceded by\nHarry Reid\nUnited States Senator\nfrom Kentucky\n\nIncumbent\n\nAssumed office\nJanuary 3, 1985\nServing with Rand Paul\nPreceded by\nWalter Huddleston\nSenate Minority Leader\nIn office\nJanuary 3, 2007 – January 3, 2015\nDeputy\nTrent LottJon KylJohn Cornyn\nPreceded by\nHarry Reid\nSucceeded by\nHarry Reid\nSenate Majority Whip\nIn office\nJanuary 3, 2003 – January 3, 2007\nLeader\nBill Frist\nPreceded by\nHarry Reid\nSucceeded by\nDick Durbin\nChair of the Senate Rules Committee\nIn office\nJanuary 20, 2001 – June 6, 2001\nPreceded by\nChris Dodd\nSucceeded by\nChris Dodd\nIn office\nJanuary 3, 1999 – January 3, 2001\nPreceded by\nJohn Warner\nSucceeded by\nChris Dodd\nJudge-Executive of Jefferson County\nIn office\n1977–1984\nPreceded by\nTodd Hollenbach III\nSucceeded by\nBremer Ehrler\nUnited States Assistant Attorney General for the Office of Legislative AffairsActing\nIn office\n1975\nPresident\nGerald Ford\nPreceded by\nVincent Rakestraw\nSucceeded by\nMichael Uhlmann\n\nPersonal details\nBorn\nAddison Mitchell McConnell Jr.(1942-02-20) February 20, 1942 (age 75)Sheffield, Alabama, U.S.\nPolitical party\nRepublican\nSpouse(s)\nSherrill Redmon (m. 1968; div. 1980)Elaine Chao (m. 1993)\nChildren\n3\nEducation\nUniversity of Louisville (BA)University of Kentucky (JD)\nNet worth\n$22.5 million (estimate)[1]\nSignature\n\nWebsite\nSenate website\nMilitary service\nAllegiance\n United States\nService/branch\n United States Army\nYears of service\n1967\nUnit\nUnited States Army Reserve\n"
 ```
 
 #### 3. Make a data frame
@@ -145,28 +143,8 @@ infobox_table
 
 ```
 ## {xml_node}
-## <table class="infobox vcard" style="width:22em">
-##  [1] <tr>\n<th colspan="2" style="text-align:center;font-size:125%;font- ...
-##  [2] <tr>\n<td colspan="2" style="text-align:center"><a href="/wiki/File ...
-##  [3] <tr>\n<td colspan="2" style="text-align:center"></td>\n</tr>\n
-##  [4] <tr>\n<th colspan="2" style="text-align:center;background:lavender" ...
-##  [5] <tr>\n<td colspan="2" style="text-align:center;border-bottom:none"> ...
-##  [6] <tr>\n<td colspan="2" style="text-align:center;border-bottom:none"> ...
-##  [7] <tr>\n<th scope="row" style="text-align:left">Deputy</th>\n<td><a h ...
-##  [8] <tr>\n<th scope="row" style="text-align:left"><span class="nowrap"> ...
-##  [9] <tr>\n<th colspan="2" style="text-align:center;background:lavender" ...
-## [10] <tr>\n<td colspan="2" style="text-align:center;border-bottom:none"> ...
-## [11] <tr>\n<td colspan="2" style="text-align:center;border-bottom:none"> ...
-## [12] <tr>\n<th scope="row" style="text-align:left"><span class="nowrap"> ...
-## [13] <tr>\n<th colspan="2" style="text-align:center;background:lavender" ...
-## [14] <tr>\n<td colspan="2" style="text-align:center;border-bottom:none"> ...
-## [15] <tr>\n<th scope="row" style="text-align:left">Deputy</th>\n<td>\n<a ...
-## [16] <tr>\n<th scope="row" style="text-align:left"><span class="nowrap"> ...
-## [17] <tr>\n<th scope="row" style="text-align:left"><span class="nowrap"> ...
-## [18] <tr>\n<th colspan="2" style="text-align:center;background:lavender" ...
-## [19] <tr>\n<td colspan="2" style="text-align:center;border-bottom:none"> ...
-## [20] <tr>\n<th scope="row" style="text-align:left">Leader</th>\n<td><a h ...
-## ...
+## <table class="plainlinks metadata ambox ambox-style ambox-Recentism" role="presentation">
+## [1] <tr>\n<td class="mbox-image">\n<div style="width:52px"><img alt="" s ...
 ```
 
 ```r
@@ -197,10 +175,6 @@ library(dplyr)
 ```
 
 ```
-## Warning: package 'dplyr' was built under R version 3.4.2
-```
-
-```
 ## 
 ## Attaching package: 'dplyr'
 ```
@@ -227,10 +201,8 @@ sub_infobox_table_df
 ```
 
 ```
-##               key           value
-## 1       Full name Mitch McConnell
-## 2 Political party      Republican
-## 3        Children               3
+##         key           value
+## 1 Full name Mitch McConnell
 ```
 
 You should now have the following data frame to work with:
@@ -324,17 +296,3 @@ get_wiki_info("Susan_Collins")
 ## 2 Political party    Republican
 ## 3        Children          <NA>
 ```
-
-####  5. Get all senators' pages
-**_(Optional, for bonus points)_**
-
-a) On this page (https://en.wikipedia.org/wiki/Current_members_of_the_United_States_Senate) 
-you find a list of all current senators of the U.S. congress.  
-Import the site and obtain a vector with the URLs for the Wikipedia sites of 
-all 100 members of congress (hint: the function `xml_attr` is one option). 
-Note, this should only include the URLs and remove all other content.  
-
-b) Create a loop that uses your `get_wiki_info` function to import the information on political party and number of children for all members of the senate.  
-
-c) Clean up your data to provide some summary statistics. How many children does the average senator have? What about by party affiliation? 
-
