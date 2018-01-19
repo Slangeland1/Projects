@@ -1,0 +1,510 @@
+---
+title: "QMSS G5072 Homework 6"
+author: Stephanie Langeland
+date: 2017-10-24
+always_allow_html: yes
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r Setup, include = FALSE, results = 'hide', warning = FALSE}
+#install.packages("knitr")
+library(knitr)
+opts_chunk$set(fig.path = "images/",
+               cache.path = "cache/",
+               cache = FALSE,
+               echo = TRUE, 
+               message = FALSE, 
+               warning = FALSE
+               )
+```
+
+Working with Strings
+============================
+
+### 1. Words in Ulysses
+
+For our first exercise, we will analyze a major work by James Joyce entitled 
+"Ulysses". Follow the code below to download the book from project Gutenberg 
+and transform the lines of the book into a words dataframe.
+
+```{r, message = FALSE, warning = FALSE, results = 'hide', echo = FALSE}
+## Please don't show this code or output in your homework
+
+# Install and load the package `gutenbergr`. 
+#install.packages("gutenbergr")
+library(gutenbergr)
+# Let's get the book "Ulysses" by James Joyce
+gutenberg_works(author == "Joyce, James")
+book <- gutenberg_download(4300)
+book
+
+# Install and load the package `tidytext`. 
+#install.packages("tidytext")
+library(tidytext)
+library(dplyr)
+# Now let's get the words in the text
+words <- book %>%
+  unnest_tokens(word, text)
+words
+```
+
+#### a) Words with `z`
+
+Select all words that contain at least one `z`.
+
+```{r}
+library(stringr)
+z_words <- str_subset(words$word,
+                          "z")
+
+z_words
+```
+
+Among the z-words, tabulate how many `z`'s the words contain (i.e. how many words 
+contain one `z`, two `z`'s etc.). 
+
+```{r}
+z_words_tbl <- str_count(z_words,
+                         "z")
+
+table(z_words_tbl)
+```
+
+Find the z-word(s) with z's that are as far apart as possible (i.e. we are 
+interested in the distance between two z's in the word. That means the word 
+could contain more than two z's.).
+ 
+```{r}
+zz_words <- z_words[z_words_tbl == 2]
+zz_words
+
+zz_distance <- str_locate_all(zz_words,
+                              "z")
+
+zz_distance2 <- as.data.frame(zz_distance)
+
+zz_distance2[ , 1:4]
+
+zz_words3 <- z_words[z_words_tbl == 3]
+zz_words3
+
+zz_distance3 <- str_locate_all(zz_words3,
+                               "z")
+
+zz_distance3 
+
+zz_distance4 <- as.data.frame(zz_distance3)
+
+zz_distance2[1, 163] <- 2
+zz_distance2[2, 163] <- 4
+
+colnames(zz_distance2)[163] <- "start.81"
+
+zz_distance2[1, 164] <- 4
+zz_distance2[2, 164] <- 12
+colnames(zz_distance2)[164] <- "end.81"
+
+zz_distance2[3, ] <- zz_distance2[2, ] - zz_distance2[1, ]
+
+zz_lengths <- sort(
+  unique(
+    zz_distance2[3, ]
+    ),
+  decreasing = TRUE
+  )
+
+#zz_lengths
+
+col_num <- which(zz_lengths > 1)
+
+zz_lengths[ , col_num]
+```
+
+Words with more than 1 space between the `z`'s in descending order:
+
+```{r}
+zz_words3 ## `end.81` is actaully `zz_words3` because it was added later on
+zz_words[3] 
+zz_words[14] 
+zz_words[62] 
+zz_words[67] 
+zz_words[68] 
+zz_words[56] 
+zz_words3 ## `start.81` is actaully `zz_words3` because it was added later on
+```
+
+All other "z" words have one space between the `z`'s.
+
+#### b) Vowels
+
+How many words start and end with a vowel? 
+
+```{r}
+vowels_st_end <- str_subset(words$word,
+                   pattern = "^[aeiouAEIOU]+.[aeiouAEIOU]$")
+
+length(vowels_st_end)
+```
+
+Are there words that start with two or more vowels? 
+
+```{r}
+vowels_2_st <- str_subset(words$word,
+                          pattern = "^[aeiouAEiou]{2,}")
+
+vowels_2_st
+
+length(vowels_2_st)
+```
+
+Find and display the word(s) with the most consecutive vowels. 
+
+  * Top 6 words with the most consecutive vowels:
+
+```{r}
+str_subset(words$word,
+             pattern = "[aeiouAEIOU]{10,}")
+```
+
+#### c) English spelling
+
+Empirically verify the rule [“i before e except after c”](https://en.wikipedia.org/wiki/I_before_E_except_after_C).
+
+```{r}
+new_string <- tolower(words$word)
+```
+
+Words that comply with the rule:
+
+```{r}
+str_view(new_string, 
+         "(cei|[^c]ie)", ## "cei" or "ie" not preceded by "c"
+         match = TRUE)
+```
+
+Words that do not comply with the rule:
+
+```{r}
+str_view(new_string, 
+         "(cie|[^c]ei)", ## "cie" or "ei" not preceded by "c" 
+         match = TRUE)
+```
+
+### 2. Emergency Hospital Injuries 
+
+The file `emergency.csv` contains a random sample of 10,000 narratives of 
+injuries treated in U.S. emergency departments. We will try to extract some 
+structured data from these narratives.
+
+#### a) Length of Narratives
+
+Read in the data (use `read_csv` from the `readr` package).
+
+```{r}
+data_import <- "/Users/StephanieLangeland/Desktop/Columbia/Modern Data Structures/Langeland_Stephanie/hw06/emergency.csv"
+
+library(readr)
+data1 <- read_csv(data_import,
+                  col_types = cols(
+                    col_character()
+                  ),
+                  col_names = FALSE)
+
+colnames(data1)[1] <- "description"
+
+data1$nchar <- str_length(data1$description)
+```
+
+Find and display the longest and shortest description.
+
+  * The longest description has 143 characters, there are 66 descriptions of that
+length:
+
+```{r}
+longest <- max(data1$nchar)
+
+longest_position <- which(data1$nchar == longest)
+
+length(longest_position)
+
+table(
+  data1[longest_position, ]
+)
+```
+
+  * The shortest description has 16 characters, there are 2 descriptions of that length:
+
+```{r}
+shortest <- min(data1$nchar)
+
+shortest_position <- which(data1$nchar == shortest)
+
+length(shortest_position)
+
+data1[shortest_position, 1]
+```
+
+#### b) Fractures
+
+Find all narratives related to "fractures". Try to include singular/plural/verb
+forms in your search. 
+
+```{r}
+str_view(data1$description, 
+         pattern = "(fracture|fractured|fractures|fracturing|FRACTURE|FRACTURED|FRACTURES|FRACTURING)",
+         match = TRUE)
+```
+
+How many fracture narratives can you find?
+
+```{r}
+data1$fractures <- str_count(data1$description, 
+         pattern = "(fracture|fractured|fractures|fracturing|FRACTURE|FRACTURED|FRACTURES|FRACTURING)")
+
+frac_narr_position <- which(data1$fractures > 0)
+
+length(frac_narr_position)
+```
+
+  * There are 524 fracture-related narratives. 
+
+#### c) Body Parts
+
+Among the fracture narratives, try to identify the body parts that are 
+fractured (_Note_: Don't go overboard. A selection of parts is sufficient.). 
+
+The selection/sample of body parts to be used for this exercise is noted below:
+
+```{r}
+fracture_data <- subset(data1, 
+                        subset = fractures > 0)
+
+fracture_data$description <- tolower(fracture_data$description)
+
+fracture_data$all_parts <- str_extract_all(fracture_data$description,
+         "arm|arms|leg|legs|knee|knees|ankle|ankles|wrist|wrists|head|face|elbow|elbows|shoulder|shoulders|hand|hands|toe|toes|finger|fingers|hip|hips|foot|feet|nose|clavicle|neck|rib|ribs|thumb|thumbs")
+
+fracture_data$all_parts <- str_replace_all(fracture_data$all_parts,
+                                           '"',
+                                           "")
+
+fracture_data$all_parts <- str_replace_all(fracture_data$all_parts,
+                                           "^c\\(",
+                                           "")
+
+fracture_data$all_parts <- str_replace_all(fracture_data$all_parts,
+                                           "\\)",
+                                           "")
+                                           
+fracture_data$all_parts <- str_replace_all(fracture_data$all_parts,
+                                           "character\\(0",
+                                           "")
+
+ncol(fracture_data)
+
+fracture_data[ ,5:8] <- str_split(fracture_data$all_parts,
+                                  ",",
+                                  simplify = TRUE)
+
+fracture_data$n_parts <- str_count(fracture_data$all_parts,
+                                       ",") ## number of body parts in narrative
+
+colnames(fracture_data)[5] <- "part1"
+colnames(fracture_data)[6] <- "part2"
+colnames(fracture_data)[7] <- "part3"
+colnames(fracture_data)[8] <- "part4"
+```
+
+Make a histogram of fractured body parts (but make sure plural and singular 
+are combined.)
+
+```{r}
+## The only plural result was "feet", so replace it with "foot":
+fracture_data$part1 <- ifelse(fracture_data$part1 == "feet",
+                                      "foot",
+                                      fracture_data$part1)
+
+fracture_data$part2 <- ifelse(fracture_data$part2 == "feet",
+                                      "foot",
+                                      fracture_data$part2)
+
+fracture_data$part3 <- ifelse(fracture_data$part3 == "feet",
+                                      "foot",
+                                      fracture_data$part3)
+
+fracture_data$part4 <- ifelse(fracture_data$part4 == "feet",
+                                      "foot",
+                                      fracture_data$part4)
+
+## Tabulate data for histogram:
+library(QMSS)
+tbl1 <- as.data.frame(Tab(fracture_data$part1))
+tbl1$parts <- rownames(tbl1)
+
+tbl2 <- as.data.frame(Tab(fracture_data$part2))
+tbl2$parts <- rownames(tbl2)
+
+tbl3 <- as.data.frame(Tab(fracture_data$part3))
+tbl3$parts <- rownames(tbl3)
+
+tbl4 <- as.data.frame(Tab(fracture_data$part4))
+tbl4$parts <- rownames(tbl4)
+
+tbl_parts <- cbind(tbl1,
+                   tbl2)
+
+tbl_parts$num <- tbl_parts[ , 1] + tbl_parts[ , 5]
+
+tbl_parts <- tbl_parts[ , -c(1:7)]
+
+tbl_parts <- tbl_parts[-1, ]
+
+tbl_parts <- merge(tbl_parts, 
+                    tbl3,
+                    all.x = TRUE)
+
+tbl_parts$Count <- ifelse(is.na(tbl_parts$Count),
+                          0,
+                          tbl_parts$Count)
+
+tbl_parts$num <- tbl_parts$num + tbl_parts$Count
+
+tbl_parts <- tbl_parts[, -c(3:5)]
+
+tbl_parts <- merge(tbl_parts, 
+                    tbl4,
+                    all.x = TRUE)
+
+tbl_parts$Count <- ifelse(is.na(tbl_parts$Count),
+                          0,
+                          tbl_parts$Count)
+
+tbl_parts$num <- tbl_parts$num + tbl_parts$Count
+
+tbl_parts <- tbl_parts[, -c(3:5)]
+
+
+
+library(ggplot2)
+
+ggplot(data = tbl_parts,
+       aes(x = parts,
+           y = num)) +
+  geom_bar(stat = "identity") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+  xlab("Body Parts") +
+  ylab("Count") +
+  ggtitle("Sample of Fractured Body Parts")
+```
+
+#### d) Age and Gender
+
+Let's try to extract age and gender. In a number of narratives you may have noticed a pattern:
+
+  * "**75 YOM**, FELL DOWN STAIRS, FRACTURE LEG": A 75 year old male.
+  * "**21MOF** FINGER SHUT IN WINDOW AT HOME;NAILBED INJURY: A 21 month-old female child.
+  * "DX:AVULSION OF SKIN-**50YOF**-CUT THUMB WITH SCISSORS TONIGHT-OPENING A BOX": A 50 year old female.
+  * "LEFT ELBOW CONTUSION,RT SHIN LAC.PT WAS ICE SKATING AND FELL.": No information about age or gender.
+  
+  You are generally looking for a pattern with a number (_age_), something to indicate the _units_, e.g. YO or YR for years old, or MO for months old, and a character that identifies the _gender_. So, I suggest to think of a pattern that combines these three parts. 
+  
+Create variables for age and gender (make sure to convert months to years when necessary).
+
+   * There are also people who are days old.
+
+```{r}
+data1$description2 <- tolower(data1$description)
+
+data1$description2 <- str_replace_all(data1$description2, 
+                                      " ", 
+                                      "") ## remove spaces
+
+data1$description2 <- str_replace_all(data1$description2, 
+                                      '[[:punct:] ]+', 
+                                      "") ## remove punctuaton
+
+data1$details1 <- str_extract(data1$description2,
+                          "[0-9]?[0-9]?[0-9](y|yr|m|day|month|year)(old)(male|m|female|f)?") 
+
+data1$details1a <- str_extract(data1$description2,
+                              "[0-9]?[0-9]?[0-9](y|yr|m|day|month|year)(o)(male|m|female|f)?") 
+
+data1$details1b <- str_extract(data1$description2,
+                              "[0-9]?[0-9]?[0-9](y|yr|m|day|month|year)o?(male|m|female|f)?") 
+
+data1$details1c <- str_extract(data1$description2,
+                              "[0-9]?[0-9]?[0-9](y|yr|m|day|month|year)old?(male|m|female|f)?") 
+
+data1$details1d <- str_extract(data1$description2,
+                              "[0-9]?[0-9]?[0-9][yyr|mdaymonthyear][oold]?[malemfemalef]?") 
+
+data1$gender <- str_extract(data1$details1d,
+                            "f$|m$")
+
+
+data1$age_digit <- str_extract(data1$details1b,
+                              "[0-9]{2,3}")
+
+data1$age_unit <- str_extract(data1$details1d,
+                         "(m|mo|month|y|d)")
+
+typeof(data1$age_digit)
+data1$age_digit <- as.numeric(data1$age_digit)
+
+data1$age <- data1$age_digit
+
+data1$age <- ifelse(data1$age_unit == "m",
+                   data1$age_digit / 12,
+                   data1$age_digit) ## month(s) old: age in years
+
+data1$age <- ifelse(data1$age_unit == "d",
+                   data1$age_digit / 365,
+                   data1$age) ## day(s) old: age in years
+
+data1 <- within(data1, rm("age_unit")) ## remove this column
+data1 <- within(data1, rm("age_digit")) ## remove this column
+
+#summary(is.na(data1$gender))
+#summary(is.na(data1$age))
+
+data1[1:5, c(1, 10:11)]
+```
+
+How many men and women are in the data? 
+
+```{r}
+sum(data1$gender == "m", 
+    na.rm = T) ## men
+
+sum(data1$gender == "f", 
+    na.rm = T) ## women
+```
+
+  * There are 4,351 men and 3,397 women.
+
+Provide a line graph of the number of injuries (y-axis) vs age (x-axis) disaggregated 
+by gender.
+
+  * Assuming that each narrative is an injury that prompted an emergency room visit:
+
+```{r, warning = FALSE, message = FALSE}
+ggplot(data = data1,
+       aes(x = age)) +
+  geom_line(stat = 'count') +
+  xlab("Age") +
+  ylab("Number of Injuries") +
+  ggtitle("Distribution of Age by Injuries - No Gender")
+
+ggplot(data = data1,
+       aes(x = age,
+           col = gender)) +
+  geom_line(stat = 'count') +
+  xlab("Age") +
+  ylab("Number of Injuries") +
+  ggtitle("Distribution of Age by Injuries By Gender")
+```
+  

@@ -3,7 +3,7 @@ Stephanie Langeland's LinkedIn Profile:  https://www.linkedin.com/in/stephaniela
 
 __The following is a compilation of small projects to demonstrate various skills:__
 
-  * 
+  * [Working with text data.]()
 
 __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (April 2017)__
    
