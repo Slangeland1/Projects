@@ -179,21 +179,19 @@ new_string <- tolower(words$word)
 Words that comply with the rule:
 
 ```{r}
-comply <- str_view(new_string, 
-         "(cei|[^c]ie)", ## "cei" or "ie" not preceded by "c"
-         match = TRUE)
+comply <- str_subset(new_string, 
+         "(cei|[^c]ie)") ## "cei" or "ie" not preceded by "c"
 
-comply_list <- as.list(comply)
-
-head(comply_list)
+head(comply)
 ```
 
 Words that do not comply with the rule:
 
 ```{r}
-str_view(new_string, 
-         "(cie|[^c]ei)", ## "cie" or "ei" not preceded by "c" 
-         match = TRUE)
+non_compliance <- str_subset(new_string, 
+                             "(cie|[^c]ei)") ## "cie" or "ei" not preceded by "c"
+
+head(non_compliance)
 ```
 
 ### 2. Emergency Hospital Injuries 
@@ -256,9 +254,10 @@ Find all narratives related to "fractures". Try to include singular/plural/verb
 forms in your search. 
 
 ```{r}
-str_view(data1$description, 
-         pattern = "(fracture|fractured|fractures|fracturing|FRACTURE|FRACTURED|FRACTURES|FRACTURING)",
-         match = TRUE)
+fractures_display <- str_subset(data1$description, 
+         pattern = "(fracture|fractured|fractures|fracturing|FRACTURE|FRACTURED|FRACTURES|FRACTURING)")
+
+head(fractures_display)
 ```
 
 How many fracture narratives can you find?
