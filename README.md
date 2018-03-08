@@ -11,6 +11,8 @@ __The following is a compilation of small projects to demonstrate various skills
   
   * [Web Scraping Project](https://github.com/Slangeland1/Projects/blob/master/Web%20Scraping/Langeland_Stephanie_hw09.md)
   
+  *[UFO Sightings R Shiny App](https://langeland.shinyapps.io/shiny_tutorial/)
+  
   * [Writing an API Client Project](https://github.com/Slangeland1/Projects/blob/master/Writing%20an%20API%20Client/Langeland_Stephanie_hw08.md)
 
 __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (April 2017)__
