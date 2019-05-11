@@ -15,7 +15,7 @@ __The following is a compilation of small projects to demonstrate various skills
   
   * [Writing an API Client in __R__](https://github.com/Slangeland1/Projects/blob/master/Writing%20an%20API%20Client/Langeland_Stephanie_hw08.md)
   
-  * [NLP, Ridge & Lasso Regression, and Data Visualization in __Python__ - download HTML files locally to view Python](https://github.com/Slangeland1/Projects/tree/master/NLP%2C%20Ridge%20%26%20Lasso%20Regression%2C%20and%20Data%20Visualization%20in%20Python)
+  * [NLP, Ridge & Lasso Regression, and Data Visualization in __Python__ - download HTML files locally to view](https://github.com/Slangeland1/Projects/tree/master/NLP%2C%20Ridge%20%26%20Lasso%20Regression%2C%20and%20Data%20Visualization%20in%20Python)
 
 __"An Analysis of the Impact of Neighbors’ Expectations on Regional Home Values" (April 2017)__
    
