@@ -1,4 +1,4 @@
-__Coding Portfolio:__ This repo contains select projects completed by Stephanie Langeland during her early career, immediately following graduate school.
+__Coding Portfolio:__ This repo contains select projects completed by Stephanie Langeland during her early career, during or immediately following graduate school.
 
 
 [Stephanie Langeland's LinkedIn Profile](https://www.linkedin.com/in/stephanielangeland/)
